@@ -1,9 +1,10 @@
-package demjanov.av.ru.github.network;
+package ru.demjanov_av.githubviewer.injector.network;
 
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import ru.demjanov_av.githubviewer.network.RestAPI;
 
 @Module
 public class CreaterRestAPI {

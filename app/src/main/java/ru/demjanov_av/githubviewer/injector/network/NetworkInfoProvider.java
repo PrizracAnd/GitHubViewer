@@ -1,4 +1,4 @@
-package demjanov.av.ru.github.network;
+package ru.demjanov_av.githubviewer.injector.network;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -6,7 +6,8 @@ import android.net.NetworkInfo;
 
 import dagger.Module;
 import dagger.Provides;
-import demjanov.av.ru.github.presenters.ContextProvider;
+import ru.demjanov_av.githubviewer.injector.ContextProvider;
+
 
 /**
  * Created by demjanov on 06.07.2018.

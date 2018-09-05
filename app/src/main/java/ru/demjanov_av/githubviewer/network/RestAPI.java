@@ -1,11 +1,12 @@
-package demjanov.av.ru.github.network;
+package ru.demjanov_av.githubviewer.network;
+
 
 import java.util.List;
 
-import demjanov.av.ru.github.models.RetrofitModel;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import ru.demjanov_av.githubviewer.models.RetrofitModel;
 
 public interface RestAPI {
     @GET("users")

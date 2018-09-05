@@ -1,4 +1,4 @@
-package demjanov.av.ru.github.models;
+package ru.demjanov_av.githubviewer.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

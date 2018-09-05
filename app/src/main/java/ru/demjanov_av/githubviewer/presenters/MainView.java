@@ -1,4 +1,4 @@
-package demjanov.av.ru.github.presenters;
+package ru.demjanov_av.githubviewer.presenters;
 
 import android.support.annotation.Nullable;
 
