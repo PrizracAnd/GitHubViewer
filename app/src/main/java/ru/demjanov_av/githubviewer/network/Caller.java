@@ -72,7 +72,7 @@ public class Caller {
     // Constructor
     ////////////////////////////////////////////////////
     public Caller(Context context) {
-        this.retrofitModelList = new ArrayList<RetrofitModel>();
+        this.retrofitModelList = new ArrayList<RetrofitModel>(); //Fixme может плохо отразиться при повторном использовании объекта - переписать!!!
 
         DaggerInjectorToCaller.builder()
                 .contextProvider(new ContextProvider(context))
@@ -85,6 +85,9 @@ public class Caller {
     // Getters and Setters
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
+    public int getCodeMessage() {
+        return codeMessage;
+    }
 
     public String getMessages(){
         String messageString = titleMessage[this.codeMessage];
@@ -167,6 +170,7 @@ public class Caller {
                                     curRetrofitModel = response.body().get(i);
                                     retrofitModelList.add(curRetrofitModel);
                                 }
+                                setMessageInfo(ALL_GUT, null);
                             }else {
                                 setMessageInfo(NOT_LOADING_DATA, null);
                             }
