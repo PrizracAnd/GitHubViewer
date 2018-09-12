@@ -131,6 +131,7 @@ public class Caller {
         return call;
     }
 
+    @Nullable
     private Call createCallOneUser(String userName){
         Call call;
         try {
@@ -153,6 +154,8 @@ public class Caller {
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
     public void downloadUsers() {
+        resetCaller();
+
         this.isDownloads = true;
         Call call = createCallMoreUsers();
 
@@ -196,4 +199,16 @@ public class Caller {
     }
     //-----End-------------------------------------------
 
+
+    /////////////////////////////////////////////////////
+    // Method resetCaller
+    ////////////////////////////////////////////////////
+    public void resetCaller(){
+        if(this.retrofitModelList.size() > 0) {
+            this.retrofitModelList.removeAll(this.retrofitModelList);
+        }
+        this.retrofitModelList = new ArrayList<RetrofitModel>();
+        this.codeMessage = NOT_MESSAGE;
+        this.message = null;
+    }
 }

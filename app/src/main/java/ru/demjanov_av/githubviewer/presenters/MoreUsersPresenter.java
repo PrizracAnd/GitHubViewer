@@ -1,6 +1,7 @@
 package ru.demjanov_av.githubviewer.presenters;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import java.util.List;
 
@@ -58,5 +59,34 @@ public class MoreUsersPresenter {
         }else {
             moreUsersFragment.setError(codeMessage, caller.getMessages());
         }
+    }
+
+
+    /////////////////////////////////////////////////////
+    // Method getUsers
+    ////////////////////////////////////////////////////
+    @Nullable
+    public String getUsers(){
+//        String result;
+        if (this.retrofitModelList.size() < 1){
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for(RetrofitModel item: this.retrofitModelList) {
+            sb.append(RetrofitModel.LOGIN + ":\t");
+            sb.append(item.getLogin());
+            sb.append("<br/>");
+            sb.append(RetrofitModel.ID +":\t");
+            sb.append(item.getId());
+            sb.append("<br/>");
+            sb.append(RetrofitModel.AVATAR_URL +":\t");
+            sb.append(item.getAvatarUrl());
+            sb.append("<br/>");
+            sb.append("---*****---");
+            sb.append("<br/>");
+            sb.append("<br/>");
+        }
+        return sb.toString();
     }
 }

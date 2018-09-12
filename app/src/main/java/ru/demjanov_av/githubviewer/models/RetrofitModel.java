@@ -3,6 +3,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class RetrofitModel {
+    public static final String LOGIN = "login";
+    public static final String ID = "id";
+    public static final String AVATAR_URL = "avatar_url";
+
     @SerializedName("login")
     @Expose
     private String login;
