@@ -30,9 +30,9 @@ public class MoreUsersPresenter {
     /////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////
-    public MoreUsersPresenter(MoreUsersFragment moreUsersFragment) {
+    public MoreUsersPresenter(MoreUsersFragment moreUsersFragment, Context context) {
         this.moreUsersFragment = moreUsersFragment;
-        this.context = moreUsersFragment.getContext();
+        this.context = context;
     }
 
     /////////////////////////////////////////////////////
