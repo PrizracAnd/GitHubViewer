@@ -13,7 +13,7 @@ import ru.demjanov_av.githubviewer.views.MoreUsersFragment;
  * Created by demjanov on 11.09.2018.
  */
 
-public class MoreUsersPresenter {
+public class MoreUsersPresenter  extends MyPresenter {
     //-----Class variables begin-------------------------
     private Context context;
     private MoreUsersFragment moreUsersFragment;
@@ -36,11 +36,27 @@ public class MoreUsersPresenter {
     }
 
     /////////////////////////////////////////////////////
+    // Methods for Callers callings
+    ////////////////////////////////////////////////////
+    //-----Begin-----------------------------------------
+    @Override
+    public void onResp(List<RetrofitModel> retrofitModelList, Boolean isDownload, @Nullable String message) {
+//        super.onResp(retrofitModelList, isDownload, message);
+    }
+
+    @Override
+    public void onFail(Boolean isDownload, @Nullable String message) {
+//        super.onFail(isDownload, message);
+    }
+
+    //-----End-------------------------------------------
+
+    /////////////////////////////////////////////////////
     // Method downloadUsers
     ////////////////////////////////////////////////////
     public void downloadUsers(){
         moreUsersFragment.startLoad();
-        Caller caller = new Caller(this.context);
+        Caller caller = new Caller(this.context, this);
         caller.downloadUsers();
 
         long t0 = System.currentTimeMillis();

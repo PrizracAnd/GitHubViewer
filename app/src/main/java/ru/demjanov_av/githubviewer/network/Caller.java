@@ -16,6 +16,7 @@ import retrofit2.Response;
 import ru.demjanov_av.githubviewer.injector.ContextProvider;
 import ru.demjanov_av.githubviewer.injector.network.DaggerInjectorToCaller;
 import ru.demjanov_av.githubviewer.models.RetrofitModel;
+import ru.demjanov_av.githubviewer.presenters.MyPresenter;
 
 public class Caller {
     //-----Constants begin-------------------------------
@@ -55,6 +56,7 @@ public class Caller {
 
     //-----Class variables begin-------------------------
     private List<RetrofitModel> retrofitModelList;
+    private MyPresenter presenter;
     //-----Class variables end---------------------------
 
 
@@ -71,8 +73,9 @@ public class Caller {
     /////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////
-    public Caller(Context context) {
+    public Caller(Context context, MyPresenter presenter) {
         this.retrofitModelList = new ArrayList<RetrofitModel>(); //Fixme может плохо отразиться при повторном использовании объекта - переписать!!!
+        this.presenter = presenter;
 
         DaggerInjectorToCaller.builder()
                 .contextProvider(new ContextProvider(context))
@@ -169,16 +172,21 @@ public class Caller {
                             if (response != null) {
 //String data = response.body().toString();
                                 RetrofitModel curRetrofitModel = null;
+
                                 for (int i = 0; i < response.body().size(); i++) {
                                     curRetrofitModel = response.body().get(i);
                                     retrofitModelList.add(curRetrofitModel);
                                 }
+
                                 setMessageInfo(ALL_GUT, null);
+                                presenter.onResp(retrofitModelList, false, message);
                             }else {
                                 setMessageInfo(NOT_LOADING_DATA, null);
+                                presenter.onFail(false, message);
                             }
                         } else {
                             setMessageInfo(RESPONSE_ERROR, "" + response.code());
+                            presenter.onFail(false, message);
                         }
                         isDownloads = false;
                     }
@@ -187,6 +195,7 @@ public class Caller {
                     public void onFailure(Call<List<RetrofitModel>> call, Throwable t) {
                         setMessageInfo(ON_FAILURE, t.getMessage());
                         isDownloads = false;
+                        presenter.onFail(false, message);
                     }
                 });
             }else {
