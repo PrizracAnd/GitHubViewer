@@ -23,5 +23,5 @@ public interface CallerInterface {
 
     void onFail();
 
-    void onFail(Boolean isDownload, @Nullable String message);
+    void onFail(Boolean isDownload, int codeMessage, @Nullable String message);
 }

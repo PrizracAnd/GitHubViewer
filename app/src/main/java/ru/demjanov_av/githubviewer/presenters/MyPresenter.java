@@ -43,7 +43,7 @@ public abstract class MyPresenter implements CallerInterface {
     }
 
     @Override
-    public void onFail(Boolean isDownload, @Nullable String message) {
+    public void onFail(Boolean isDownload, int codeMessage, @Nullable String message) {
 
     }
     //-----End-------------------------------------------

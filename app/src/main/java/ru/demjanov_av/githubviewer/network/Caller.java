@@ -56,7 +56,7 @@ public class Caller {
 
 
     //-----Class variables begin-------------------------
-    private List<RetrofitModel> retrofitModelList;
+//    private List<RetrofitModel> retrofitModelList;
     private MyPresenter presenter;
     //-----Class variables end---------------------------
 
@@ -75,7 +75,7 @@ public class Caller {
     // Constructor
     ////////////////////////////////////////////////////
     public Caller(Context context, MyPresenter presenter) {
-        this.retrofitModelList = new ArrayList<RetrofitModel>(); //Fixme может плохо отразиться при повторном использовании объекта - переписать!!!
+
         this.presenter = presenter;
 
         DaggerInjectorToCaller.builder()
@@ -101,9 +101,9 @@ public class Caller {
         return messageString;
     }
 
-    public List<RetrofitModel> getRetrofitModelList() {
-        return retrofitModelList;
-    }
+//    public List<RetrofitModel> getRetrofitModelList() {
+//        return retrofitModelList;
+//    }
 
     public boolean isDownloads() {
         return isDownloads;
@@ -124,10 +124,10 @@ public class Caller {
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
     @Nullable
-    private Call createCallMoreUsers(){
+    private Call createCallMoreUsers(String previous_id){
         Call call;
         try {
-            call = this.restAPI.loadUsers();
+            call = this.restAPI.loadUsers(previous_id);
         }catch (Exception e){
             setMessageInfo(NO_RETROFIT, e.getMessage());
             return null;
@@ -157,11 +157,11 @@ public class Caller {
     // Methods download
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
-    public void downloadUsers()throws IOException {
+    public void downloadUsers(String previous_id)throws IOException {
         resetCaller();
 
         this.isDownloads = true;
-        Call call = createCallMoreUsers();
+        Call call = createCallMoreUsers(previous_id);
 
         if (call != null) {
             if(isConnected()) {
@@ -170,24 +170,28 @@ public class Caller {
                     @Override
                     public void onResponse(Call<List<RetrofitModel>> call, Response<List<RetrofitModel>> response) {
                         if (response.isSuccessful()) {
-                            if (response != null) {
+                            if (response.body() != null) {
 //String data = response.body().toString();
-                                RetrofitModel curRetrofitModel = null;
 
+                                List<RetrofitModel> retrofitModelList = new ArrayList<RetrofitModel>();
+
+                                //------------------------------------------------
+//                                RetrofitModel curRetrofitModel = null;
+//
                                 for (int i = 0; i < response.body().size(); i++) {
-                                    curRetrofitModel = response.body().get(i);
-                                    retrofitModelList.add(curRetrofitModel);
+//                                    curRetrofitModel = response.body().get(i);
+                                    retrofitModelList.add(response.body().get(i));
                                 }
 
                                 setMessageInfo(ALL_GUT, null);
                                 presenter.onResp(retrofitModelList, false, message);
                             }else {
                                 setMessageInfo(NOT_LOADING_DATA, null);
-                                presenter.onFail(false, message);
+                                presenter.onFail(false, NOT_LOADING_DATA, message);
                             }
                         } else {
                             setMessageInfo(RESPONSE_ERROR, "" + response.code());
-                            presenter.onFail(false, message);
+                            presenter.onFail(false, RESPONSE_ERROR, message);
                         }
                         isDownloads = false;
                     }
@@ -196,15 +200,20 @@ public class Caller {
                     public void onFailure(Call<List<RetrofitModel>> call, Throwable t) {
                         setMessageInfo(ON_FAILURE, t.getMessage());
                         isDownloads = false;
-                        presenter.onFail(false, message);
+                        presenter.onFail(false, ON_FAILURE, message);
                     }
                 });
             }else {
                 setMessageInfo(NO_CONNECTED, null);
                 isDownloads = false;
+                presenter.onFail(false, NO_CONNECTED, message);
             }
 
-        }else isDownloads = false;
+        }else{
+            setMessageInfo(NO_CALL, null);
+            isDownloads = false;
+            presenter.onFail(false, NO_CALL, null);
+        }
 
     }
     //-----End-------------------------------------------
@@ -214,10 +223,10 @@ public class Caller {
     // Method resetCaller
     ////////////////////////////////////////////////////
     public void resetCaller(){
-        if(this.retrofitModelList.size() > 0) {
-            this.retrofitModelList.removeAll(this.retrofitModelList);
-        }
-        this.retrofitModelList = new ArrayList<RetrofitModel>();
+//        if(this.retrofitModelList.size() > 0) {
+//            this.retrofitModelList.removeAll(this.retrofitModelList);
+//        }
+//        this.retrofitModelList = new ArrayList<RetrofitModel>();
         this.codeMessage = NOT_MESSAGE;
         this.message = null;
     }

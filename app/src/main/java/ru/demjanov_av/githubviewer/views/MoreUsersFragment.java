@@ -6,17 +6,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ru.demjanov_av.githubviewer.R;
+import ru.demjanov_av.githubviewer.network.Caller;
 import ru.demjanov_av.githubviewer.presenters.MainView;
 import ru.demjanov_av.githubviewer.presenters.MoreUsersPresenter;
 
@@ -97,7 +95,13 @@ public class MoreUsersFragment extends Fragment implements MainView {
 
     @Override
     public void setError(int number, @Nullable String message) {
-        String msg = number + ": " + message;
+        String msg;
+        if(Caller.titleMessage.length > number) {                   // --обходим NullPointer Exception
+            msg = Caller.titleMessage[number] + ": " + message;
+        }else {
+            msg = number + ": " + message;
+        }
+
         tvLoad.setText(msg);
     }
 
