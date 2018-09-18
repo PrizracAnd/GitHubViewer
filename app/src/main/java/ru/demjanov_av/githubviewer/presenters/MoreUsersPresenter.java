@@ -45,9 +45,9 @@ public class MoreUsersPresenter {
 
         long t0 = System.currentTimeMillis();
         while (caller.isDownloads()){
-            if((System.currentTimeMillis() - t0) >= this.timeWaite){
-                break;
-            }
+//            if((System.currentTimeMillis() - t0) >= this.timeWaite){
+//                break;
+//            }
         }
 
         moreUsersFragment.endLoad();

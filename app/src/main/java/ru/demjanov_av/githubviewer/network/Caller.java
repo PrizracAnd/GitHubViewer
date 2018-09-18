@@ -5,6 +5,7 @@ import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -153,7 +154,7 @@ public class Caller {
     // Methods download
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
-    public void downloadUsers() {
+    public void downloadUsers()throws IOException {
         resetCaller();
 
         this.isDownloads = true;
