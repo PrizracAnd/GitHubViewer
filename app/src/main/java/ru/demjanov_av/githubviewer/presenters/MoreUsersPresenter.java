@@ -6,6 +6,12 @@ import android.support.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import io.realm.Realm;
+import ru.demjanov_av.githubviewer.db.QueryUsers;
+import ru.demjanov_av.githubviewer.injector.ContextProvider;
+import ru.demjanov_av.githubviewer.injector.db.DaggerInjectorRealm;
 import ru.demjanov_av.githubviewer.models.RetrofitModel;
 import ru.demjanov_av.githubviewer.network.Caller;
 import ru.demjanov_av.githubviewer.views.MoreUsersFragment;
@@ -26,6 +32,10 @@ public class MoreUsersPresenter  extends MyPresenter {
     private boolean isDownload = false;
     private List<RetrofitModel> retrofitModelList;
     private String previous_id = "0";
+    QueryUsers queryUsers;
+
+    @Inject
+    Realm realm;
     //-----Other variables end---------------------------
 
 
@@ -33,9 +43,17 @@ public class MoreUsersPresenter  extends MyPresenter {
     // Constructor
     ////////////////////////////////////////////////////
     public MoreUsersPresenter(MoreUsersFragment moreUsersFragment, Context context) {
+
         this.moreUsersFragment = moreUsersFragment;
         this.context = context;
+
+        DaggerInjectorRealm.builder()
+                .contextProvider(new ContextProvider(context))
+                .build()
+                .injectToMoreUsersPresenter(this);
+        this.queryUsers = new QueryUsers(this.realm);
     }
+
 
     /////////////////////////////////////////////////////
     // Methods for Callers callings

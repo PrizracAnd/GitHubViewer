@@ -1,8 +1,10 @@
 package ru.demjanov_av.githubviewer.presenters;
 
+
 import android.support.annotation.Nullable;
 
 import java.util.List;
+
 
 import ru.demjanov_av.githubviewer.models.RetrofitModel;
 import ru.demjanov_av.githubviewer.network.CallerInterface;
@@ -12,6 +14,20 @@ import ru.demjanov_av.githubviewer.network.CallerInterface;
  */
 
 public abstract class MyPresenter implements CallerInterface {
+//    @Inject
+//    Realm realm;
+
+
+    /////////////////////////////////////////////////////
+    // Constructor
+    ////////////////////////////////////////////////////
+//    public MyPresenter(Context context){
+//        DaggerInjectorRealm.builder()
+//                .contextProvider(new ContextProvider(context))
+//                .build()
+//                .injectToPresenter(this);
+//    }
+
 
     /////////////////////////////////////////////////////
     // Methods of CallerInterface
