@@ -74,9 +74,9 @@ public class Caller {
     /////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////
-    public Caller(Context context, MyPresenter presenter) {
+    public Caller(Context context, MyPresenter target) {
 
-        this.presenter = presenter;
+        this.presenter = target;
 
         DaggerInjectorToCaller.builder()
                 .contextProvider(new ContextProvider(context))

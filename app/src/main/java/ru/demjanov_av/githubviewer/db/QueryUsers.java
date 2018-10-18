@@ -16,24 +16,39 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import ru.demjanov_av.githubviewer.models.RealmModelUser;
 import ru.demjanov_av.githubviewer.models.RetrofitModel;
+import ru.demjanov_av.githubviewer.presenters.MyPresenter;
 
 public class QueryUsers {
+    //-----Constants begin-------------------------------
     private final static String REALM_DB = "REALM_DB:";
 
+    //-----Code operations begin-------------------------
+    public final static int SELECT              = 0;
+    public final static int INSERT_OR_UPDATE    = 1;
+    public final static int DELETE              = 2;
+    public final static int DELETE_ALL          = 3;
+    //-----Code operations end---------------------------
+    //-----Constants end---------------------------------
+
+
+    //-----Class variables begin-------------------------
     private Realm realm;
+    private MyPresenter presenter;
+    //-----Class variables end---------------------------
 
     private RealmResults<RealmModelUser> modelUsersList;
     private Disposable disposable;
     private boolean isTransact = false;
-    private boolean isSuccess;
+    private boolean isSuccess = false;
 
 
     /////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////
 
-    public QueryUsers(Realm realm) {
+    public QueryUsers(Realm realm, MyPresenter target) {
         this.realm = realm;
+        this.presenter = target;
     }
 
 
@@ -75,9 +90,11 @@ public class QueryUsers {
                 try {
                     realm.beginTransaction();
                     RealmModelUser realmModelUser = realm.createObject(RealmModelUser.class);
+//                    RealmModelUser realmModelUser = new RealmModelUser();
                     realmModelUser.setLogin(curLogin);
                     realmModelUser.setId(curUserID);
                     realmModelUser.setAvatarUrl(curAvatarUrl);
+                    realm.insertOrUpdate(realmModelUser);
                     realm.commitTransaction();
                 }catch (Exception e) {
                     realm.cancelTransaction();
@@ -89,7 +106,7 @@ public class QueryUsers {
             emitter.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        this.disposable = completable.subscribeWith(createObserver());
+        this.disposable = completable.subscribeWith(createObserver(INSERT_OR_UPDATE));
     }
 
 
@@ -109,7 +126,7 @@ public class QueryUsers {
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        this.disposable = completable.subscribeWith(createObserver());
+        this.disposable = completable.subscribeWith(createObserver(DELETE));
     }
 
 
@@ -139,6 +156,8 @@ public class QueryUsers {
                 isTransact = false;
                 isSuccess = true;
 
+                presenter.onCompleteQueryUsers(SELECT, list);
+
             }
 
             @Override
@@ -147,6 +166,8 @@ public class QueryUsers {
                 isTransact = false;
                 isSuccess = false;
                 Log.d(REALM_DB, e.getMessage());
+
+                presenter.onErrorQueryUsers(e.getMessage());
             }
         });
     }
@@ -158,12 +179,14 @@ public class QueryUsers {
     ////////////////////////////////////////////////////
     @NonNull
     @org.jetbrains.annotations.Contract(value = " -> !null", pure = true)
-    private DisposableCompletableObserver createObserver(){
+    private DisposableCompletableObserver createObserver(int codeOperation){
         return new DisposableCompletableObserver() {
             @Override
             public void onComplete() {
                 isTransact = false;
                 isSuccess = true;
+
+                presenter.onCompleteQueryUsers(codeOperation, null);
 
             }
 
@@ -172,6 +195,8 @@ public class QueryUsers {
                 isTransact = false;
                 isSuccess = false;
                 Log.d(REALM_DB, e.getMessage());
+
+                presenter.onErrorQueryUsers(e.getMessage());
             }
         };
     }

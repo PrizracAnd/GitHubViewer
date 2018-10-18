@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 import java.util.List;
 
 
+import io.realm.RealmResults;
+import ru.demjanov_av.githubviewer.db.QueryUsersInterface;
+import ru.demjanov_av.githubviewer.models.RealmModelUser;
 import ru.demjanov_av.githubviewer.models.RetrofitModel;
 import ru.demjanov_av.githubviewer.network.CallerInterface;
 
@@ -13,7 +16,7 @@ import ru.demjanov_av.githubviewer.network.CallerInterface;
  * Created by demjanov on 17.09.2018.
  */
 
-public abstract class MyPresenter implements CallerInterface {
+public abstract class MyPresenter implements CallerInterface, QueryUsersInterface {
 //    @Inject
 //    Realm realm;
 
@@ -60,6 +63,22 @@ public abstract class MyPresenter implements CallerInterface {
 
     @Override
     public void onFail(Boolean isDownload, int codeMessage, @Nullable String message) {
+
+    }
+    //-----End-------------------------------------------
+
+
+    /////////////////////////////////////////////////////
+    // Methods of CallerInterface
+    ////////////////////////////////////////////////////
+    //-----Begin-----------------------------------------
+    @Override
+    public void onCompleteQueryUsers(int codeOperation, @Nullable RealmResults<RealmModelUser> realmModelUsers) {
+
+    }
+
+    @Override
+    public void onErrorQueryUsers(String message) {
 
     }
     //-----End-------------------------------------------

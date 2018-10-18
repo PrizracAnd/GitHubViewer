@@ -9,9 +9,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import ru.demjanov_av.githubviewer.db.QueryUsers;
 import ru.demjanov_av.githubviewer.injector.ContextProvider;
 import ru.demjanov_av.githubviewer.injector.db.DaggerInjectorRealm;
+import ru.demjanov_av.githubviewer.models.RealmModelUser;
 import ru.demjanov_av.githubviewer.models.RetrofitModel;
 import ru.demjanov_av.githubviewer.network.Caller;
 import ru.demjanov_av.githubviewer.views.MoreUsersFragment;
@@ -31,6 +33,7 @@ public class MoreUsersPresenter  extends MyPresenter {
     private long timeWaite = 10000;
     private boolean isDownload = false;
     private List<RetrofitModel> retrofitModelList;
+    private RealmResults<RealmModelUser> realmModelUsers;
     private String previous_id = "0";
     QueryUsers queryUsers;
 
@@ -51,7 +54,7 @@ public class MoreUsersPresenter  extends MyPresenter {
                 .contextProvider(new ContextProvider(context))
                 .build()
                 .injectToMoreUsersPresenter(this);
-        this.queryUsers = new QueryUsers(this.realm);
+        this.queryUsers = new QueryUsers(this.realm, this);
     }
 
 
@@ -69,8 +72,11 @@ public class MoreUsersPresenter  extends MyPresenter {
             this.previous_id = prev_id;
         }
         //}----------------------------------------------
+
+        this.queryUsers.insertUsersData(retrofitModelList);
+
         this.moreUsersFragment.endLoad();
-        this.moreUsersFragment.setData(0);
+//        this.moreUsersFragment.setData(0);
 
     }
 
@@ -133,13 +139,37 @@ public class MoreUsersPresenter  extends MyPresenter {
     ////////////////////////////////////////////////////
     @Nullable
     public String getUsers(){
-//        String result;
-        if (this.retrofitModelList.size() < 1){
+
+//        if (this.retrofitModelList.size() < 1){
+//            return null;
+//        }
+//
+//        StringBuilder sb = new StringBuilder();
+//        for(RetrofitModel item: this.retrofitModelList) {
+//            sb.append(RetrofitModel.LOGIN + ":\t");
+//            sb.append(item.getLogin());
+//            sb.append("\n");
+//            sb.append(RetrofitModel.ID +":\t");
+//            sb.append(item.getId());
+//            sb.append("\n");
+//            sb.append(RetrofitModel.AVATAR_URL +":\t");
+//            sb.append(item.getAvatarUrl());
+//            sb.append("\n");
+//            sb.append("---*****---");
+//            sb.append("\n");
+//            sb.append("\n");
+//        }
+//        return sb.toString();
+
+
+//        **********************************************************
+
+        if(this.realmModelUsers == null){
             return null;
         }
 
         StringBuilder sb = new StringBuilder();
-        for(RetrofitModel item: this.retrofitModelList) {
+        for (RealmModelUser item: this.realmModelUsers){
             sb.append(RetrofitModel.LOGIN + ":\t");
             sb.append(item.getLogin());
             sb.append("\n");
@@ -154,5 +184,32 @@ public class MoreUsersPresenter  extends MyPresenter {
             sb.append("\n");
         }
         return sb.toString();
+
+
     }
+
+    /////////////////////////////////////////////////////
+    // Methods for QueryUsers callings
+    ////////////////////////////////////////////////////
+    //-----Begin-----------------------------------------
+    @Override
+    public void onCompleteQueryUsers(int codeOperation, @Nullable RealmResults<RealmModelUser> realmModelUsers) {
+        switch (codeOperation){
+            case 0:
+                this.realmModelUsers = realmModelUsers;
+                this.moreUsersFragment.setData(0);
+                break;
+            case 1:
+                this.queryUsers.selectAllUsers();
+                break;
+            default:
+                 break;
+        }
+    }
+
+    @Override
+    public void onErrorQueryUsers(String message) {
+
+    }
+    //-----End-------------------------------------------
 }
