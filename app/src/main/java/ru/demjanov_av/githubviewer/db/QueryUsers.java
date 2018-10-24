@@ -1,5 +1,7 @@
 package ru.demjanov_av.githubviewer.db;
 
+import android.app.Application;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -13,6 +15,7 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import ru.demjanov_av.githubviewer.models.RealmModelUser;
 import ru.demjanov_av.githubviewer.models.RetrofitModel;
@@ -32,10 +35,12 @@ public class QueryUsers {
 
 
     //-----Class variables begin-------------------------
-    private Realm realm;
+//    private Realm realm;
+    private Context context;
     private MyPresenter presenter;
     //-----Class variables end---------------------------
 
+    private RealmConfiguration realmConfiguration;
     private RealmResults<RealmModelUser> modelUsersList;
     private Disposable disposable;
     private boolean isTransact = false;
@@ -46,9 +51,13 @@ public class QueryUsers {
     // Constructor
     ////////////////////////////////////////////////////
 
-    public QueryUsers(Realm realm, MyPresenter target) {
-        this.realm = realm;
+    public QueryUsers(Context context, MyPresenter target) {
+//        this.realm = realm;
+        this.context = context;
         this.presenter = target;
+
+        Realm.init(context);//FIXME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        this.realmConfiguration = new RealmConfiguration.Builder().build();
     }
 
 
@@ -82,15 +91,16 @@ public class QueryUsers {
             String curLogin;
             String curUserID;
             String curAvatarUrl;
-            Realm realm = this.realm;
+//            Realm realm = this.realm;
+            Realm realm = Realm.getInstance(this.realmConfiguration); //Fixme!!!
             for (RetrofitModel item : listUsers) {
                 curLogin = item.getLogin();
                 curUserID = item.getId();
                 curAvatarUrl = item.getAvatarUrl();
                 try {
                     realm.beginTransaction();
-                    RealmModelUser realmModelUser = realm.createObject(RealmModelUser.class);
-//                    RealmModelUser realmModelUser = new RealmModelUser();
+//                    RealmModelUser realmModelUser = realm.createObject(RealmModelUser.class);
+                    RealmModelUser realmModelUser = new RealmModelUser();
                     realmModelUser.setLogin(curLogin);
                     realmModelUser.setId(curUserID);
                     realmModelUser.setAvatarUrl(curAvatarUrl);
@@ -116,7 +126,8 @@ public class QueryUsers {
     public void deleteAllUsers(){
         this.isTransact = true;
         Completable completable = Completable.create(emitter -> {
-            Realm realm = this.realm;
+//            Realm realm = this.realm;
+            Realm realm = Realm.getInstance(this.realmConfiguration); //Fixme!!!
             try{
                 final RealmResults<RealmModelUser> listResults = realm.where(RealmModelUser.class).findAll();
                 realm.executeTransaction(realm1 -> listResults.deleteAllFromRealm());
@@ -137,7 +148,8 @@ public class QueryUsers {
     public void selectAllUsers(){
         this.isTransact = true;
         Single single = Single.create(emitter -> {
-            Realm realm = this.realm;
+//            Realm realm = this.realm;
+            Realm realm = Realm.getInstance(this.realmConfiguration); //Fixme!!!
             try {
                 RealmResults<RealmModelUser> listResult = realm.where(RealmModelUser.class).findAll();
                 emitter.onSuccess(listResult);

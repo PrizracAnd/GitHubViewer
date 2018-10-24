@@ -47,6 +47,7 @@ public class MoreUsersPresenter  extends MyPresenter {
     ////////////////////////////////////////////////////
     public MoreUsersPresenter(MoreUsersFragment moreUsersFragment, Context context) {
 
+
         this.moreUsersFragment = moreUsersFragment;
         this.context = context;
 
@@ -54,7 +55,7 @@ public class MoreUsersPresenter  extends MyPresenter {
                 .contextProvider(new ContextProvider(context))
                 .build()
                 .injectToMoreUsersPresenter(this);
-        this.queryUsers = new QueryUsers(this.realm, this);
+        this.queryUsers = new QueryUsers(context, this);
     }
 
 
