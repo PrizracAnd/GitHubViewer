@@ -73,7 +73,7 @@ public abstract class MyPresenter implements CallerInterface, QueryUsersInterfac
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
     @Override
-    public void onCompleteQueryUsers(int codeOperation, @Nullable RealmResults<RealmModelUser> realmModelUsers) {
+    public void onCompleteQueryUsers(int codeOperation, @Nullable List<RealmModelUser> realmModelUsers) {
 
     }
 

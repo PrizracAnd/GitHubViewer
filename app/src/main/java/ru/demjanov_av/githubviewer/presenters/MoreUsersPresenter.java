@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import ru.demjanov_av.githubviewer.db.QueryUsers;
 import ru.demjanov_av.githubviewer.injector.ContextProvider;
@@ -33,13 +34,19 @@ public class MoreUsersPresenter  extends MyPresenter {
     private long timeWaite = 10000;
     private boolean isDownload = false;
     private List<RetrofitModel> retrofitModelList;
-    private RealmResults<RealmModelUser> realmModelUsers;
+    private List<RealmModelUser> realmModelUsers;
     private String previous_id = "0";
     QueryUsers queryUsers;
+    //-----Other variables end---------------------------
 
+
+    //-----Injection variables begin---------------------
     @Inject
     Realm realm;
-    //-----Other variables end---------------------------
+
+    @Inject
+    RealmConfiguration realmConfiguration;
+    //-----Injection variables end---------------------------
 
 
     /////////////////////////////////////////////////////
@@ -55,7 +62,7 @@ public class MoreUsersPresenter  extends MyPresenter {
                 .contextProvider(new ContextProvider(context))
                 .build()
                 .injectToMoreUsersPresenter(this);
-        this.queryUsers = new QueryUsers(context, this);
+        this.queryUsers = new QueryUsers(context, this); //Fixme!! Проверить как пашет и реализовать передачу туда единного конфига рилма а не контекста!
     }
 
 
@@ -194,7 +201,7 @@ public class MoreUsersPresenter  extends MyPresenter {
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
     @Override
-    public void onCompleteQueryUsers(int codeOperation, @Nullable RealmResults<RealmModelUser> realmModelUsers) {
+    public void onCompleteQueryUsers(int codeOperation, @Nullable List<RealmModelUser> realmModelUsers) {
         switch (codeOperation){
             case 0:
                 this.realmModelUsers = realmModelUsers;

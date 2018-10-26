@@ -152,7 +152,10 @@ public class QueryUsers {
             Realm realm = Realm.getInstance(this.realmConfiguration); //Fixme!!!
             try {
                 RealmResults<RealmModelUser> listResult = realm.where(RealmModelUser.class).findAll();
-                emitter.onSuccess(listResult);
+                //------------------------------
+                List<RealmModelUser> listUser = realm.copyFromRealm(listResult);
+                //------------------------------
+                emitter.onSuccess(listUser);
             }catch (Exception e){
                 emitter.onError(e);
             }
