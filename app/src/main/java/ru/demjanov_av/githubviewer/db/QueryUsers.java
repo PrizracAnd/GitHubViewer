@@ -41,7 +41,7 @@ public class QueryUsers {
     //-----Class variables end---------------------------
 
     private RealmConfiguration realmConfiguration;
-    private RealmResults<RealmModelUser> modelUsersList;
+    private List<RealmModelUser> modelUsersList;
     private Disposable disposable;
     private boolean isTransact = false;
     private boolean isSuccess = false;
@@ -66,7 +66,7 @@ public class QueryUsers {
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
 
-    public RealmResults<RealmModelUser> getModelUsersList() {
+    public List<RealmModelUser> getModelUsersList() {
         return this.modelUsersList;
     }
 
@@ -162,11 +162,11 @@ public class QueryUsers {
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        this.disposable = (Disposable) single.subscribeWith(new DisposableSingleObserver<RealmResults<RealmModelUser>>() {
+        this.disposable = (Disposable) single.subscribeWith(new DisposableSingleObserver<List<RealmModelUser>>() {
 
 
             @Override
-            public void onSuccess(RealmResults<RealmModelUser> list) {
+            public void onSuccess(List<RealmModelUser> list) {
                 modelUsersList = list;
                 isTransact = false;
                 isSuccess = true;

@@ -12,26 +12,46 @@ import ru.demjanov_av.githubviewer.injector.ContextProvider;
 @Module(includes = ContextProvider.class)
 public class RealmInit {
 
-    RealmConfiguration configuration;
+    //-----Class variables begin-------------------------
+    private RealmConfiguration configuration;
+    private Realm realm;
+    private boolean isInit = false;
+    //-----Class variables end---------------------------
 
-    public RealmInit(){
+
+    /////////////////////////////////////////////////////
+    // Initialize Method initRealm      !!!
+    ////////////////////////////////////////////////////
+    private void initRealm(Context context){
+        Realm.init(context);
         this.configuration = new RealmConfiguration.Builder().build();
+        Realm.setDefaultConfiguration(this.configuration);
+        this.realm = Realm.getDefaultInstance();
+
+        this.isInit = true;
     }
 
 
-    @Provides
-    public RealmConfiguration getConfiguration() {
-        return configuration;
-    }
-
-
+    /////////////////////////////////////////////////////
+    // Provides Methods
+    ////////////////////////////////////////////////////
+    //-----Begin-----------------------------------------
     @Provides
     public Realm getRealm(Context context) {
-        Realm.init(context);
-//        RealmConfiguration configuration = new RealmConfiguration.Builder().build();
-        Realm.setDefaultConfiguration(this.configuration);
-
-        return Realm.getDefaultInstance();
+        if(!this.isInit){
+            initRealm(context);
+        }
+        return this.realm;
     }
+
+
+    @Provides
+    public RealmConfiguration getConfiguration(Context context) {
+        if(!this.isInit){
+            initRealm(context);
+        }
+        return this.configuration;
+    }
+    //-----End-------------------------------------------
 
 }
