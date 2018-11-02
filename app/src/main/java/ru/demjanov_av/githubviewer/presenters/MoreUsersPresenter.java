@@ -62,7 +62,7 @@ public class MoreUsersPresenter  extends MyPresenter {
                 .contextProvider(new ContextProvider(context))
                 .build()
                 .injectToMoreUsersPresenter(this);
-        this.queryUsers = new QueryUsers(context, this); //Fixme!! Проверить как пашет и реализовать передачу туда единного конфига рилма а не контекста!
+        this.queryUsers = new QueryUsers(this.realmConfiguration, this);
     }
 
 
@@ -111,23 +111,6 @@ public class MoreUsersPresenter  extends MyPresenter {
         }catch (IOException e){
             onFail(false, Caller.ON_FAILURE, e.getMessage());
         }
-
-//        long t0 = System.currentTimeMillis();
-//        while (caller.isDownloads()){
-////            if((System.currentTimeMillis() - t0) >= this.timeWaite){
-////                break;
-////            }
-//        }
-//
-//        moreUsersFragment.endLoad();
-//
-//        int codeMessage = caller.getCodeMessage();
-//        if(codeMessage == Caller.ALL_GUT){
-//            this.retrofitModelList = caller.getRetrofitModelList();
-//            moreUsersFragment.setData(0);
-//        }else {
-//            moreUsersFragment.setError(codeMessage, caller.getMessages());
-//        }
     }
 
 

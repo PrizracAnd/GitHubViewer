@@ -1,9 +1,9 @@
 package ru.demjanov_av.githubviewer.db;
 
-import android.app.Application;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+
+import org.jetbrains.annotations.Contract;
 
 import java.util.List;
 
@@ -35,12 +35,10 @@ public class QueryUsers {
 
 
     //-----Class variables begin-------------------------
-//    private Realm realm;
-    private Context context;
     private MyPresenter presenter;
+    private RealmConfiguration realmConfiguration;
     //-----Class variables end---------------------------
 
-    private RealmConfiguration realmConfiguration;
     private List<RealmModelUser> modelUsersList;
     private Disposable disposable;
     private boolean isTransact = false;
@@ -50,14 +48,9 @@ public class QueryUsers {
     /////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////
-
-    public QueryUsers(Context context, MyPresenter target) {
-//        this.realm = realm;
-        this.context = context;
+    public QueryUsers(RealmConfiguration configuration, MyPresenter target) {
         this.presenter = target;
-
-        Realm.init(context);//FIXME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        this.realmConfiguration = new RealmConfiguration.Builder().build();
+        this.realmConfiguration = configuration;
     }
 
 
@@ -91,15 +84,13 @@ public class QueryUsers {
             String curLogin;
             String curUserID;
             String curAvatarUrl;
-//            Realm realm = this.realm;
-            Realm realm = Realm.getInstance(this.realmConfiguration); //Fixme!!!
+            Realm realm = Realm.getInstance(this.realmConfiguration);
             for (RetrofitModel item : listUsers) {
                 curLogin = item.getLogin();
                 curUserID = item.getId();
                 curAvatarUrl = item.getAvatarUrl();
                 try {
                     realm.beginTransaction();
-//                    RealmModelUser realmModelUser = realm.createObject(RealmModelUser.class);
                     RealmModelUser realmModelUser = new RealmModelUser();
                     realmModelUser.setLogin(curLogin);
                     realmModelUser.setId(curUserID);
@@ -126,8 +117,7 @@ public class QueryUsers {
     public void deleteAllUsers(){
         this.isTransact = true;
         Completable completable = Completable.create(emitter -> {
-//            Realm realm = this.realm;
-            Realm realm = Realm.getInstance(this.realmConfiguration); //Fixme!!!
+            Realm realm = Realm.getInstance(this.realmConfiguration);
             try{
                 final RealmResults<RealmModelUser> listResults = realm.where(RealmModelUser.class).findAll();
                 realm.executeTransaction(realm1 -> listResults.deleteAllFromRealm());
@@ -148,8 +138,7 @@ public class QueryUsers {
     public void selectAllUsers(){
         this.isTransact = true;
         Single single = Single.create(emitter -> {
-//            Realm realm = this.realm;
-            Realm realm = Realm.getInstance(this.realmConfiguration); //Fixme!!!
+            Realm realm = Realm.getInstance(this.realmConfiguration);
             try {
                 RealmResults<RealmModelUser> listResult = realm.where(RealmModelUser.class).findAll();
                 //------------------------------
@@ -192,8 +181,8 @@ public class QueryUsers {
     /////////////////////////////////////////////////////
     // Method createObserver
     ////////////////////////////////////////////////////
+    @Contract(pure = true)
     @NonNull
-    @org.jetbrains.annotations.Contract(value = " -> !null", pure = true)
     private DisposableCompletableObserver createObserver(int codeOperation){
         return new DisposableCompletableObserver() {
             @Override
