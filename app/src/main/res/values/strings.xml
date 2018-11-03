@@ -2,4 +2,5 @@
     <string name="app_name">GitHubViewer</string>
     <string name="users">Users</string>
     <string name="loadPage">Load users</string>
+    <string name="loadMore">Load more users</string>
 </resources>

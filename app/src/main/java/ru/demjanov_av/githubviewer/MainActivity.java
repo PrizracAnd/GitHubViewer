@@ -8,7 +8,7 @@ import android.os.Bundle;
 import ru.demjanov_av.githubviewer.views.MoreUsersFragment;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MoreUsersFragment.ClickListenerUsers {
 
     private FragmentManager fm;
 
@@ -48,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         super.onDestroy();
+    }
+
+    @Override
+    public void onClickUsers(String userName) {
+
     }
 
 

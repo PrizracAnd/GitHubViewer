@@ -2,6 +2,7 @@ package ru.demjanov_av.githubviewer.presenters;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,6 +25,11 @@ import ru.demjanov_av.githubviewer.views.MoreUsersFragment;
  */
 
 public class MoreUsersPresenter  extends MyPresenter {
+    //-----Constants begin-------------------------------
+    private final static String MORE_USERS_PRESENTER = "MORE_USERS_PRESENTER:";
+    //-----Constants end---------------------------------
+
+
     //-----Class variables begin-------------------------
     private Context context;
     private MoreUsersFragment moreUsersFragment;
@@ -35,8 +41,9 @@ public class MoreUsersPresenter  extends MyPresenter {
     private boolean isDownload = false;
     private List<RetrofitModel> retrofitModelList;
     private List<RealmModelUser> realmModelUsers;
+    private RealmResults<RealmModelUser> realmResults;
     private String previous_id = "0";
-    QueryUsers queryUsers;
+    private QueryUsers queryUsers;
     //-----Other variables end---------------------------
 
 
@@ -53,8 +60,6 @@ public class MoreUsersPresenter  extends MyPresenter {
     // Constructor
     ////////////////////////////////////////////////////
     public MoreUsersPresenter(MoreUsersFragment moreUsersFragment, Context context) {
-
-
         this.moreUsersFragment = moreUsersFragment;
         this.context = context;
 
@@ -63,6 +68,13 @@ public class MoreUsersPresenter  extends MyPresenter {
                 .build()
                 .injectToMoreUsersPresenter(this);
         this.queryUsers = new QueryUsers(this.realmConfiguration, this);
+
+        this.realmResults = this.realm.where(RealmModelUser.class).findAll();
+
+//        updateLoadedUsers(this.realmResults.get(this.realmResults.size() - 1).getId());
+        if(this.realmResults.size() > 0) {
+            this.previous_id = this.realmResults.get(this.realmResults.size() - 1).getId();
+        }
     }
 
 
@@ -84,8 +96,8 @@ public class MoreUsersPresenter  extends MyPresenter {
         this.queryUsers.insertUsersData(retrofitModelList);
 
         this.moreUsersFragment.endLoad();
-//        this.moreUsersFragment.setData(0);
 
+        updateLoadedUsers(this.realmResults.get(this.realmResults.size() - 1).getId());
     }
 
 
@@ -97,6 +109,7 @@ public class MoreUsersPresenter  extends MyPresenter {
     }
 
     //-----End-------------------------------------------
+
 
     /////////////////////////////////////////////////////
     // Method downloadUsers
@@ -122,6 +135,32 @@ public class MoreUsersPresenter  extends MyPresenter {
         if(this.retrofitModelList.size() > 0) {
             return this.retrofitModelList.get(this.retrofitModelList.size() - 1).getId();
         }else return null;
+    }
+
+
+    /////////////////////////////////////////////////////
+    // Method updateLoadedUsers
+    ////////////////////////////////////////////////////
+    private void updateLoadedUsers(String realmMaxId){
+        Long lastRecord = strToLong(realmMaxId);
+        if(strToLong(this.previous_id) < lastRecord){
+            downloadUsers();
+        }
+    }
+
+
+    /////////////////////////////////////////////////////
+    // Method strToLong
+    ////////////////////////////////////////////////////
+    private Long strToLong(String str){
+        Long res = -1L;
+        try {
+            res = new Long(str);
+        }catch (NumberFormatException e){
+            Log.d(MORE_USERS_PRESENTER, e.getMessage());
+        }
+
+        return res;
     }
 
 
@@ -179,6 +218,16 @@ public class MoreUsersPresenter  extends MyPresenter {
 
     }
 
+
+    /////////////////////////////////////////////////////
+    // Method getResults
+    ////////////////////////////////////////////////////
+    public RealmResults<RealmModelUser> getResults(){
+//        return this.realm.where(RealmModelUser.class).findAll();
+        return this.realmResults;
+    }
+
+
     /////////////////////////////////////////////////////
     // Methods for QueryUsers callings
     ////////////////////////////////////////////////////
@@ -203,4 +252,14 @@ public class MoreUsersPresenter  extends MyPresenter {
 
     }
     //-----End-------------------------------------------
+
+
+    /////////////////////////////////////////////////////
+    // Method destroy
+    ////////////////////////////////////////////////////
+    public void destroy(){
+        this.queryUsers.destroy();
+        this.realm.close();
+    }
+
 }
