@@ -146,6 +146,18 @@ public class Caller {
         }
         return call;
     }
+
+    @Nullable
+    private Call createCallRepos(String userName){
+        Call call;
+        try {
+            call = this.restAPI.loadRepos(userName);
+        }catch (Exception e){
+            setMessageInfo(NO_RETROFIT, e.getMessage());
+            return null;
+        }
+        return call;
+    }
     //-----End-------------------------------------------
 
     private boolean isConnected(){

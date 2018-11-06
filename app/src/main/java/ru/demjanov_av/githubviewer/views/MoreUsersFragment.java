@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import ru.demjanov_av.githubviewer.R;
 import ru.demjanov_av.githubviewer.presenters.MainView;
 import ru.demjanov_av.githubviewer.presenters.MoreUsersPresenter;
@@ -28,16 +27,9 @@ public class MoreUsersFragment extends Fragment implements MoreUsersAdapter.More
     private ClickListenerUsers mainActivity;
 
     //-----View elements variables begin-----------------
-//    @BindView(R.id.editText)
-//    EditText editText;
+//    @BindView(R.id.progressBarMore)
+//    ProgressBar progressBar;
 
-//    @BindView(R.id.btnLoad)
-//    Button buttonLoad;
-    @BindView(R.id.progressBarMore)
-    ProgressBar progressBar;
-
-//    @BindView(R.id.tvLoad)
-//    TextView tvLoad;
     @BindView(R.id.more_users_recycle)
     RecyclerView recyclerView;
     //-----View elements variables end-------------------
@@ -145,10 +137,10 @@ public class MoreUsersFragment extends Fragment implements MoreUsersAdapter.More
     /////////////////////////////////////////////////////
     // Method onClickBtnLoad
     ////////////////////////////////////////////////////
-    @OnClick(R.id.btnLoad)
-    public void onClickBtnLoad(){
-        this.presenter.downloadUsers();
-    }
+//    @OnClick(R.id.btnLoad)
+//    public void onClickBtnLoad(){
+//        this.presenter.downloadUsers();
+//    }
 
 
     /////////////////////////////////////////////////////

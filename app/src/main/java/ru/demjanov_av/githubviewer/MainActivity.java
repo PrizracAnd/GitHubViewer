@@ -50,10 +50,7 @@ public class MainActivity extends AppCompatActivity implements MoreUsersFragment
         super.onDestroy();
     }
 
-    @Override
-    public void onClickUsers(String userName) {
-
-    }
+    
 
 
     /////////////////////////////////////////////////////
@@ -61,8 +58,8 @@ public class MainActivity extends AppCompatActivity implements MoreUsersFragment
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
 
-//    @Override
-//    public void onClickUsers(String userName) {
+    @Override
+    public void onClickUsers(String userName) {
 //        OneUsersFragment oneUsersFragment = new OneUsersFragment();
 //        oneUsersFragment.setUserName(userName);
 //
@@ -70,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements MoreUsersFragment
 //                .replace(R.id.fragment_container, oneUsersFragment)
 //                .addToBackStack(null)
 //                .commit();
-//    }
+    }
 
     //-----End-------------------------------------------
 }
