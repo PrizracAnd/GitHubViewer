@@ -8,8 +8,10 @@ import java.util.List;
 
 import io.realm.RealmResults;
 import ru.demjanov_av.githubviewer.db.QueryUsersInterface;
+import ru.demjanov_av.githubviewer.models.RealmModelRep;
 import ru.demjanov_av.githubviewer.models.RealmModelUser;
 import ru.demjanov_av.githubviewer.models.RetrofitModel;
+import ru.demjanov_av.githubviewer.models.RetrofitModelRep;
 import ru.demjanov_av.githubviewer.network.CallerInterface;
 
 /**
@@ -65,6 +67,17 @@ public abstract class MyPresenter implements CallerInterface, QueryUsersInterfac
     public void onFail(Boolean isDownload, int codeMessage, @Nullable String message) {
 
     }
+
+    @Override
+    public void onRespRepos(List<RetrofitModelRep> retrofitModelRepList) {
+
+    }
+
+    @Override
+    public void onRespRepos(List<RetrofitModelRep> retrofitModelRepList, Boolean isDownload, @Nullable String message) {
+
+    }
+
     //-----End-------------------------------------------
 
 
@@ -78,8 +91,19 @@ public abstract class MyPresenter implements CallerInterface, QueryUsersInterfac
     }
 
     @Override
+    public void onCompleteQueryReps(int codeOperation, @Nullable List<RealmModelRep> realmModelReps) {
+
+    }
+
+    @Override
     public void onErrorQueryUsers(String message) {
 
     }
+
+    @Override
+    public void onErrorQueryReps(String message) {
+
+    }
+
     //-----End-------------------------------------------
 }

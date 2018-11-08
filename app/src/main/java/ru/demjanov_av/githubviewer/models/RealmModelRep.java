@@ -8,10 +8,20 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class RealmModelRep extends RealmObject {
+    //-----Constants begin-------------------------------
+    public final static String REP_ID = "repId";
+    public final static String USER_ID = "userId";
+    public final static String NAME_REP = "nameRep";
+    //-----Constants end---------------------------------
+
+
+    //-----Class variables begin-------------------------
     @PrimaryKey
     private String repId;
     private String userId;
     private String nameRep;
+    //-----Class variables end---------------------------
+
 
     /////////////////////////////////////////////////////
     // Getters and Setters

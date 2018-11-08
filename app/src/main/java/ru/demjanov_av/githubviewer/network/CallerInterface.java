@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import java.util.List;
 
 import ru.demjanov_av.githubviewer.models.RetrofitModel;
+import ru.demjanov_av.githubviewer.models.RetrofitModelRep;
 
 /**
  * Created by demjanov on 11.09.2018.
@@ -19,6 +20,11 @@ public interface CallerInterface {
     void onResp(List<RetrofitModel> retrofitModelList, Boolean isDownload, @Nullable String message);
 
     void onResp(RetrofitModel retrofitModel, Boolean isDownload, @Nullable String message);
+
+
+    void onRespRepos(List<RetrofitModelRep> retrofitModelRepList);
+
+    void onRespRepos(List<RetrofitModelRep> retrofitModelRepList, Boolean isDownload, @Nullable String message);
 
 
     void onFail();

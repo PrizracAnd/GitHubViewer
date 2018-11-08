@@ -9,9 +9,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class RetrofitModelRep
 {
-    public static final String LOGIN = "login";
+    public static final String NAME = "name";
     public static final String ID = "id";
-    public static final String AVATAR_URL = "avatar_url";
+
+    private String userId;
 
     @SerializedName("id")
     @Expose
@@ -40,6 +41,15 @@ public class RetrofitModelRep
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     //-----End------------------------------------------

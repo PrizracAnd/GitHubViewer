@@ -17,6 +17,7 @@ import retrofit2.Response;
 import ru.demjanov_av.githubviewer.injector.ContextProvider;
 import ru.demjanov_av.githubviewer.injector.network.DaggerInjectorToCaller;
 import ru.demjanov_av.githubviewer.models.RetrofitModel;
+import ru.demjanov_av.githubviewer.models.RetrofitModelRep;
 import ru.demjanov_av.githubviewer.presenters.MyPresenter;
 
 public class Caller {
@@ -183,15 +184,11 @@ public class Caller {
                     public void onResponse(Call<List<RetrofitModel>> call, Response<List<RetrofitModel>> response) {
                         if (response.isSuccessful()) {
                             if (response.body() != null) {
-//String data = response.body().toString();
+
 
                                 List<RetrofitModel> retrofitModelList = new ArrayList<RetrofitModel>();
 
-                                //------------------------------------------------
-//                                RetrofitModel curRetrofitModel = null;
-//
                                 for (int i = 0; i < response.body().size(); i++) {
-//                                    curRetrofitModel = response.body().get(i);
                                     retrofitModelList.add(response.body().get(i));
                                 }
 
@@ -210,6 +207,109 @@ public class Caller {
 
                     @Override
                     public void onFailure(Call<List<RetrofitModel>> call, Throwable t) {
+                        setMessageInfo(ON_FAILURE, t.getMessage());
+                        isDownloads = false;
+                        presenter.onFail(false, ON_FAILURE, message);
+                    }
+                });
+            }else {
+                setMessageInfo(NO_CONNECTED, null);
+                isDownloads = false;
+                presenter.onFail(false, NO_CONNECTED, message);
+            }
+
+        }else{
+            setMessageInfo(NO_CALL, null);
+            isDownloads = false;
+            presenter.onFail(false, NO_CALL, null);
+        }
+
+    }
+
+
+    public void downloadUser(String userName){
+        resetCaller();
+        this.isDownloads = true;
+        Call call = createCallOneUser(userName);
+
+        if(isConnected()){
+            if(call != null) {
+                call.enqueue(new Callback<RetrofitModel>() {
+                    @Override
+                    public void onResponse(Call<RetrofitModel> call, Response<RetrofitModel> response) {
+                        if(response.isSuccessful()){
+                            if(response.body() != null){
+                                RetrofitModel rm = response.body();
+                                List<RetrofitModel> listRetrofitModel = new ArrayList<RetrofitModel>();
+                                listRetrofitModel.add(rm);
+
+                                setMessageInfo(ALL_GUT, null);
+                                presenter.onResp(listRetrofitModel, false, message);
+                            }else {
+                                setMessageInfo(NOT_LOADING_DATA, null);
+                                presenter.onFail(false, NOT_LOADING_DATA, message);
+                            }
+                        }else {
+                            setMessageInfo(RESPONSE_ERROR, "" + response.code());
+                            presenter.onFail(false, RESPONSE_ERROR, message);
+                        }
+
+                        isDownloads = false;
+                    }
+
+                    @Override
+                    public void onFailure(Call<RetrofitModel> call, Throwable t) {
+                        setMessageInfo(ON_FAILURE, t.getMessage());
+                        presenter.onFail(false, ON_FAILURE, message);
+                        isDownloads = false;
+                    }
+                });
+            }else isDownloads = false;
+        }else {
+            setMessageInfo(NO_CONNECTED, null);
+            presenter.onFail(false, NO_CONNECTED, message);
+            isDownloads = false;
+        }
+
+    }
+
+
+    public void downloadRepos(String userName)throws IOException {
+        resetCaller();
+
+        this.isDownloads = true;
+        Call call = createCallRepos(userName);
+
+        if (call != null) {
+            if(isConnected()) {
+                call.enqueue(new Callback<List<RetrofitModelRep>>(){
+
+                    @Override
+                    public void onResponse(Call<List<RetrofitModelRep>> call, Response<List<RetrofitModelRep>> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
+
+                                List<RetrofitModelRep> retrofitModelRepList = new ArrayList<RetrofitModelRep>();
+
+                                for (int i = 0; i < response.body().size(); i++) {
+                                    retrofitModelRepList.add(response.body().get(i));
+                                }
+
+                                setMessageInfo(ALL_GUT, null);
+                                presenter.onRespRepos(retrofitModelRepList, false, message);
+                            }else {
+                                setMessageInfo(NOT_LOADING_DATA, null);
+                                presenter.onFail(false, NOT_LOADING_DATA, message);
+                            }
+                        } else {
+                            setMessageInfo(RESPONSE_ERROR, "" + response.code());
+                            presenter.onFail(false, RESPONSE_ERROR, message);
+                        }
+                        isDownloads = false;
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<RetrofitModelRep>> call, Throwable t) {
                         setMessageInfo(ON_FAILURE, t.getMessage());
                         isDownloads = false;
                         presenter.onFail(false, ON_FAILURE, message);

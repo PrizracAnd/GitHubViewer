@@ -4,10 +4,20 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class RealmModelUser extends RealmObject{
+    //-----Constants begin-------------------------------
+    public final static String LOGIN = "login";
+    public final static String ID = "id";
+    public final static String AVATAR_URL = "avatarUrl";
+    //-----Constants end---------------------------------
+
+
+    //-----Class variables begin-------------------------
     private String login;
     @PrimaryKey
     private String id;
     private String avatarUrl;
+    //-----Class variables end---------------------------
+
 
     /////////////////////////////////////////////////////
     // Getters and Setters
