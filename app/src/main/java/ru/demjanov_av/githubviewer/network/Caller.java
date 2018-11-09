@@ -3,6 +3,7 @@ package ru.demjanov_av.githubviewer.network;
 import android.content.Context;
 import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 
 import java.io.IOException;
@@ -41,6 +42,8 @@ public class Caller {
             , "RESPONSE_ERROR: "
             , "NOT_LOADING_DATA: "
     };
+
+    public final static String CALLER = "CALLER: ";
     //-----Messages constants end------------------------
 
     //-----Queries types constants begin-----------------
@@ -118,6 +121,10 @@ public class Caller {
     private void setMessageInfo(int codeMessage, @Nullable String message){
         this.codeMessage = codeMessage;
         this.message = message;
+
+        if(codeMessage != NOT_MESSAGE && codeMessage != ALL_GUT){
+            Log.d(CALLER, message);
+        }
     }
 
     /////////////////////////////////////////////////////
@@ -170,7 +177,7 @@ public class Caller {
     // Methods download
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
-    public void downloadUsers(String previous_id)throws IOException {
+    public void downloadUsers(String previous_id) {
         resetCaller();
 
         this.isDownloads = true;
@@ -274,7 +281,7 @@ public class Caller {
     }
 
 
-    public void downloadRepos(String userName)throws IOException {
+    public void downloadRepos(String userName) {
         resetCaller();
 
         this.isDownloads = true;

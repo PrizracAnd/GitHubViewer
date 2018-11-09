@@ -24,6 +24,7 @@ import ru.demjanov_av.githubviewer.presenters.MainView;
 
 public class OneUsersFragment extends Fragment implements MainView {
 
+    ////http://developer.alexanderklimov.ru/android/layout/swiperefreshlayout.php FIXME !!!!!!!!!!!
     @BindView(R.id.login_text)
     TextView loginText;
 

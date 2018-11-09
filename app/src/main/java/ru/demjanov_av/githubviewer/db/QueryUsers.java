@@ -33,6 +33,11 @@ public class QueryUsers {
     public final static int DELETE              = 2;
     public final static int DELETE_ALL          = 3;
     //-----Code operations end---------------------------
+
+    //-----Code entities begin---------------------------
+    public final static int USERS               = 0;
+    public final static int REPOS               = 1;
+    //-----Code entities end-----------------------------
     //-----Constants end---------------------------------
 
 
@@ -108,7 +113,7 @@ public class QueryUsers {
             emitter.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        this.disposable = completable.subscribeWith(createObserver(INSERT_OR_UPDATE));
+        this.disposable = completable.subscribeWith(createObserver(INSERT_OR_UPDATE, USERS));
     }
 
 
@@ -128,7 +133,7 @@ public class QueryUsers {
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        this.disposable = completable.subscribeWith(createObserver(DELETE));
+        this.disposable = completable.subscribeWith(createObserver(DELETE, USERS));
     }
 
 
@@ -158,7 +163,7 @@ public class QueryUsers {
             emitter.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        this.disposable = completable.subscribeWith(createObserver(INSERT_OR_UPDATE));
+        this.disposable = completable.subscribeWith(createObserver(INSERT_OR_UPDATE, REPOS));
     }
 
 
@@ -287,14 +292,20 @@ public class QueryUsers {
     //-----Begin-----------------------------------------
     @Contract(pure = true)
     @NonNull
-    private DisposableCompletableObserver createObserver(int codeOperation){
+    private DisposableCompletableObserver createObserver(int codeOperation, int codeEntity){
         return new DisposableCompletableObserver() {
             @Override
             public void onComplete() {
                 isTransact = false;
                 isSuccess = true;
 
-                presenter.onCompleteQueryUsers(codeOperation, null);
+                switch (codeEntity) {
+                    case REPOS:
+                        presenter.onCompleteQueryReps(codeOperation, null);
+                    default:
+                        presenter.onCompleteQueryUsers(codeOperation, null);
+                        break;
+                }
 
             }
 

@@ -37,7 +37,6 @@ public class MoreUsersPresenter  extends MyPresenter {
 
 
     //-----Other variables begin-------------------------
-    private long timeWaite = 10000;
     private boolean isDownload = false;
     private List<RetrofitModel> retrofitModelList;
     private List<RealmModelUser> realmModelUsers;
@@ -107,7 +106,6 @@ public class MoreUsersPresenter  extends MyPresenter {
         this.moreUsersFragment.endLoad();
         this.moreUsersFragment.setError(codeMessage, message);
     }
-
     //-----End-------------------------------------------
 
 
@@ -119,11 +117,11 @@ public class MoreUsersPresenter  extends MyPresenter {
         Caller caller = new Caller(this.context, this);
         this.isDownload = true;
 
-        try {
-            caller.downloadUsers(previous_id);
-        }catch (IOException e){
-            onFail(false, Caller.ON_FAILURE, e.getMessage());
-        }
+//        try {
+          caller.downloadUsers(previous_id);
+//        }catch (IOException e){
+//            onFail(false, Caller.ON_FAILURE, e.getMessage());
+//        }
     }
 
 
