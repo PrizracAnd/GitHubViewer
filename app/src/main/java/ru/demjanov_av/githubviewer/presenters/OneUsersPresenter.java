@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import ru.demjanov_av.githubviewer.db.QueryUsers;
+import ru.demjanov_av.githubviewer.injector.ContextProvider;
+import ru.demjanov_av.githubviewer.injector.db.DaggerInjectorRealm;
 import ru.demjanov_av.githubviewer.models.RealmModelRep;
 import ru.demjanov_av.githubviewer.models.RealmModelUser;
 import ru.demjanov_av.githubviewer.models.RetrofitModel;
@@ -61,6 +63,43 @@ public class OneUsersPresenter extends MyPresenter {
     @Inject
     RealmConfiguration realmConfiguration;
     //-----Injection variables end---------------------------
+
+
+    /////////////////////////////////////////////////////
+    // Constructor
+    ////////////////////////////////////////////////////
+    public OneUsersPresenter(OneUsersFragment oneUsersFragment, Context context, String userID) {
+        this.context = context;
+        this.oneUsersFragment = oneUsersFragment;
+        this.userID = userID;
+
+        DaggerInjectorRealm.builder()
+                .contextProvider(new ContextProvider(context))
+                .build()
+                .injectToOneUsersPresenter(this);
+
+        this.queryUsers = new QueryUsers(this.realmConfiguration, this);
+
+        this.isDownloadNeed = true;
+        this.queryUsers.selectRepos(userID);
+        this.queryUsers.selectRepos(userID);
+    }
+
+
+    /////////////////////////////////////////////////////
+    // Getters and Setters
+    ////////////////////////////////////////////////////
+    //-----Begin-----------------------------------------
+
+    public List<RealmModelUser> getRealmModelUsers() {
+        return realmModelUsers;
+    }
+
+    public List<RealmModelRep> getRealmModelReps() {
+        return realmModelReps;
+    }
+
+    //-----End-------------------------------------------
 
 
     /////////////////////////////////////////////////////
@@ -146,7 +185,7 @@ public class OneUsersPresenter extends MyPresenter {
                 onSelectedData();
                 break;
             case QueryUsers.INSERT_OR_UPDATE:
-                this.queryUsers.selectUser(this.userID);
+                this.queryUsers.selectRepos(this.userID);
                 break;
             default:
                 break;
