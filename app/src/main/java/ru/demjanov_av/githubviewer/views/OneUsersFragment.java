@@ -1,9 +1,12 @@
 package ru.demjanov_av.githubviewer.views;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +18,16 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.demjanov_av.githubviewer.R;
+import ru.demjanov_av.githubviewer.models.RealmModelRep;
+import ru.demjanov_av.githubviewer.models.RealmModelUser;
 import ru.demjanov_av.githubviewer.network.Caller;
 import ru.demjanov_av.githubviewer.presenters.MainView;
+import ru.demjanov_av.githubviewer.presenters.OneUsersPresenter;
 
 
 public class OneUsersFragment extends Fragment implements MainView {
@@ -34,11 +42,17 @@ public class OneUsersFragment extends Fragment implements MainView {
     @BindView(R.id.info_text)
     TextView infoText;
 
-    @BindView(R.id.progressBarOne)
-    ProgressBar progressBar;
+    @BindView(R.id.repos_text)
+    TextView reposText;
 
-    private String userName;
-//    private PresenterOneUser presenter;
+    @BindView(R.id.sr_layout_ouf)
+    SwipeRefreshLayout swipeRefreshLayout;
+
+//    @BindView(R.id.progressBarOne)
+//    ProgressBar progressBar;
+
+    private String userID;
+    private OneUsersPresenter presenter;
     private View rootView;
 
 
@@ -64,6 +78,25 @@ public class OneUsersFragment extends Fragment implements MainView {
     private void initializeElements(View view) {
         ButterKnife.bind(this, view);
 
+        //---SwipeRefreshLayout begin-------------------
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.downloadData();
+            }
+        });
+        swipeRefreshLayout.setColorSchemeColors(
+                Color.RED,
+                Color.BLUE,
+                Color.GREEN,
+                Color.CYAN
+        );
+        //---SwipeRefreshLayout end---------------------
+
+
+
+        //FIXME!!! В этом месте userID должен быть точно передан в данный класс!!!
+        presenter = new OneUsersPresenter(this, view.getContext(), this.userID);
 //        presenter = new PresenterOneUser(this, view.getContext());
 //        presenter.startLoadData(this.userName);
 
@@ -79,25 +112,23 @@ public class OneUsersFragment extends Fragment implements MainView {
     //-----Begin-----------------------------------------
     @Override
     public void startLoad() {
-        loginText.setVisibility(View.GONE);
-        infoText.setVisibility(View.GONE);
-        avatarImage.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
-
+        swipeRefreshLayout.setRefreshing(true);
+//        loginText.setVisibility(View.GONE);
+//        infoText.setVisibility(View.GONE);
+//        avatarImage.setVisibility(View.GONE);
     }
 
     @Override
     public void endLoad() {
-        loginText.setVisibility(View.VISIBLE);
-        infoText.setVisibility(View.VISIBLE);
-        avatarImage.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.GONE);
-
+        swipeRefreshLayout.setRefreshing(false);
+//        loginText.setVisibility(View.VISIBLE);
+//        infoText.setVisibility(View.VISIBLE);
+//        avatarImage.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void setError(int number, @Nullable String message) {
-        loginText.setText(this.userName);
+//        loginText.setText(this.userName);
 
         Context context = this.rootView.getContext().getApplicationContext();
 
@@ -110,7 +141,7 @@ public class OneUsersFragment extends Fragment implements MainView {
                 Toast.makeText(context, context.getResources().getString(R.string.no_connect),Toast.LENGTH_LONG).show();
                 break;
             case Caller.NOT_LOADING_DATA:
-                infoText.setText(getResources().getString(R.string.not_loading_data));
+//                infoText.setText(getResources().getString(R.string.not_loading_data));
                 break;
             default:
                 Log.d(Caller.titleMessage[number], message);
@@ -121,26 +152,73 @@ public class OneUsersFragment extends Fragment implements MainView {
 
     @Override
     public void setData(int dataType) {
-//        loginText.setText(presenter.getDataUserLogin());
-//        Glide.with(this)
-//                .load(presenter.getDataUserAvatarUrl())
-//                .into(avatarImage);
-//        avatarImage.setVisibility(View.VISIBLE);
-//
-//        infoText.setText(getResources().getString(R.string.user_id) + presenter.getDataUserID());
+        RealmModelUser realmModelUser = (presenter.getRealmModelUsers()).get(0);
+        List<RealmModelRep> realmModelRepList = presenter.getRealmModelReps();
 
+        if (realmModelUser != null) {
+            loginText.setText(realmModelUser.getLogin());
+            Glide.with(this)
+                    .load(realmModelUser.getAvatarUrl())
+                    .into(avatarImage);
+            avatarImage.setVisibility(View.VISIBLE);
+
+            infoText.setText(getUserInfo(realmModelUser));
+        }
+
+        if(realmModelRepList != null && realmModelRepList.size() > 0){
+            reposText.setText(getReposInfo(realmModelRepList));
+        }
 
     }
     //-----End-------------------------------------------
 
+
+    /////////////////////////////////////////////////////
+    // Methods getInfo
+    ////////////////////////////////////////////////////
+    //-----Begin-----------------------------------------
+    @NonNull
+    private String getUserInfo(RealmModelUser realmModelUser){
+
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append(getResources().getString(R.string.user_id))
+                .append(":\t")
+                .append(realmModelUser.getId())
+                .append("\n");
+
+        return sb.toString();
+    }
+
+    @NonNull
+    private String getReposInfo(List<RealmModelRep> realmModelRepList){
+
+        StringBuilder sb = new StringBuilder();
+        for (RealmModelRep item: realmModelRepList) {
+            sb
+                    .append(item.getNameRep())
+                    .append(";")
+                    .append("\n");
+        }
+        sb
+                .delete((sb.length() - 3), (sb.length()-1))
+                .append(".");
+
+
+        return sb.toString();
+    }
+    //-----End-------------------------------------------
+
+
+//  FixMe !!!! если раздел геттеров и сеттеров будет пустым, его надо вычистить!!!
     /////////////////////////////////////////////////////
     // Getters and Setters
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+//    public void setUserName(String userName) {
+//        this.userName = userName;
+//    }
 
     //-----End-------------------------------------------
 }

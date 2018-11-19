@@ -143,6 +143,8 @@ public class OneUsersPresenter extends MyPresenter {
 
         this.isSelectRepos = true;
         this.queryUsers.insertReposData(retrofitModelRepList);
+
+        this.oneUsersFragment.endLoad();
     }
 
 
@@ -151,7 +153,7 @@ public class OneUsersPresenter extends MyPresenter {
         this.isDownloadUser = isDownload;
         this.isDownloadRepos = isDownload;
         this.oneUsersFragment.endLoad();
-        this.oneUsersFragment.setError(codeMessage, message); //FIXME!!!!!!!!!!!!!!*****!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        this.oneUsersFragment.setError(codeMessage, message); // FIXME!!!!!!!!!!!!!!*****!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
     //-----End-------------------------------------------
 
