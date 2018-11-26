@@ -144,7 +144,7 @@ public class OneUsersPresenter extends MyPresenter {
         this.isSelectRepos = true;
         this.queryUsers.insertReposData(retrofitModelRepList);
 
-        this.oneUsersFragment.endLoad();
+//        this.oneUsersFragment.endLoad();
     }
 
 
@@ -206,7 +206,8 @@ public class OneUsersPresenter extends MyPresenter {
     // Method isSelectedData
     ////////////////////////////////////////////////////
     private void onSelectedData() {
-        if(!this.isSelectUser && !this.isSelectRepos ){
+        if(!this.isSelectUser && !this.isSelectRepos ){ //--Проверяем, получены ли все данные из БД
+            this.oneUsersFragment.endLoad();
             this.oneUsersFragment.setData(0);
             if(this.isDownloadNeed){
                 downloadData();
