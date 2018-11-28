@@ -51,7 +51,7 @@ public class OneUsersFragment extends Fragment implements MainView {
 //    @BindView(R.id.progressBarOne)
 //    ProgressBar progressBar;
 
-    private String userID;
+    private String userId;
     private OneUsersPresenter presenter;
     private View rootView;
 
@@ -95,8 +95,7 @@ public class OneUsersFragment extends Fragment implements MainView {
 
 
 
-        //FIXME!!! В этом месте userID должен быть точно передан в данный класс!!!
-        presenter = new OneUsersPresenter(this, view.getContext(), this.userID);
+        presenter = new OneUsersPresenter(this, view.getContext());
 //        presenter = new PresenterOneUser(this, view.getContext());
 //        presenter.startLoadData(this.userName);
 
@@ -210,15 +209,15 @@ public class OneUsersFragment extends Fragment implements MainView {
     //-----End-------------------------------------------
 
 
-//  FixMe !!!! если раздел геттеров и сеттеров будет пустым, его надо вычистить!!!
     /////////////////////////////////////////////////////
     // Getters and Setters
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
 
-//    public void setUserName(String userName) {
-//        this.userName = userName;
-//    }
+    public void setUserId(String userId) {
+//        this.userId = userId;
+        this.presenter.setUserID(userId);
+    }
 
     //-----End-------------------------------------------
 }

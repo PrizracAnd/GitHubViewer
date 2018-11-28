@@ -45,7 +45,7 @@ public class MoreUsersFragment extends Fragment implements MoreUsersAdapter.More
     // Interface ClickListenerUsers
     ////////////////////////////////////////////////////
     public interface ClickListenerUsers{
-        void onClickUsers(String userName);
+        void onClickUsers(String userId);
     }
 
 
@@ -148,8 +148,8 @@ public class MoreUsersFragment extends Fragment implements MoreUsersAdapter.More
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
     @Override
-    public void onCallUser(String userName) {
-        mainActivity.onClickUsers(userName);
+    public void onCallUser(String userId) {
+        mainActivity.onClickUsers(userId);
     }
 
     @Override

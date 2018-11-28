@@ -24,7 +24,7 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
     private MoreUsersFragment moreUsersFragment;
 
     interface MoreUsersCall{
-        void onCallUser(String userName);
+        void onCallUser(String userId);
     }
 
     public MoreUsersAdapter(RealmResults<RealmModelUser> moreUsers, MoreUsersFragment moreUsersFragment) {

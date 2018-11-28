@@ -68,6 +68,18 @@ public class OneUsersPresenter extends MyPresenter {
     /////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////
+    public OneUsersPresenter(OneUsersFragment oneUsersFragment, Context context) {
+        this.context = context;
+        this.oneUsersFragment = oneUsersFragment;
+
+        DaggerInjectorRealm.builder()
+                .contextProvider(new ContextProvider(context))
+                .build()
+                .injectToOneUsersPresenter(this);
+
+        this.queryUsers = new QueryUsers(this.realmConfiguration, this);
+    }
+
     public OneUsersPresenter(OneUsersFragment oneUsersFragment, Context context, String userID) {
         this.context = context;
         this.oneUsersFragment = oneUsersFragment;
@@ -97,6 +109,14 @@ public class OneUsersPresenter extends MyPresenter {
 
     public List<RealmModelRep> getRealmModelReps() {
         return realmModelReps;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+
+        this.isDownloadNeed = true;
+        this.queryUsers.selectRepos(userID);
+        this.queryUsers.selectRepos(userID);
     }
 
     //-----End-------------------------------------------

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import ru.demjanov_av.githubviewer.views.MoreUsersFragment;
+import ru.demjanov_av.githubviewer.views.OneUsersFragment;
 
 
 public class MainActivity extends AppCompatActivity implements MoreUsersFragment.ClickListenerUsers {
@@ -59,14 +60,14 @@ public class MainActivity extends AppCompatActivity implements MoreUsersFragment
     //-----Begin-----------------------------------------
 
     @Override
-    public void onClickUsers(String userName) {
-//        OneUsersFragment oneUsersFragment = new OneUsersFragment();
-//        oneUsersFragment.setUserName(userName);
-//
-//        fm.beginTransaction()
-//                .replace(R.id.fragment_container, oneUsersFragment)
-//                .addToBackStack(null)
-//                .commit();
+    public void onClickUsers(String userId) {
+        OneUsersFragment oneUsersFragment = new OneUsersFragment();
+        oneUsersFragment.setUserId(userId);
+
+        fm.beginTransaction()
+                .replace(R.id.fragment_container, oneUsersFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     //-----End-------------------------------------------
