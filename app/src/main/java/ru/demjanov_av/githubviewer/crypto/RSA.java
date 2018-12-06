@@ -24,6 +24,11 @@ public class RSA {
     //-----Class variables end---------------------------
 
 
+    //-----Other variables begin-------------------------
+    SecureRandom random = new SecureRandom();
+    //-----Other variables end---------------------------
+
+
     //////////////////////////////////////////////////////////
     ///  Constructors
     /////////////////////////////////////////////////////////
@@ -61,7 +66,7 @@ public class RSA {
             Log.d(NAME_OF_RSA, ": " + e.getMessage());
         }
 
-        SecureRandom random = new SecureRandom();
+//        SecureRandom random = new SecureRandom();
         try {
             if(pairGenerator != null) {
                 pairGenerator.initialize(DEFAULT_KEY_SIZE, random);
@@ -85,7 +90,7 @@ public class RSA {
             Log.d(NAME_OF_RSA, ": " + e.getMessage());
         }
 
-        SecureRandom random = new SecureRandom();
+//        SecureRandom random = new SecureRandom();
         try {
             if(pairGenerator != null) {
                 pairGenerator.initialize(keySize, random);
