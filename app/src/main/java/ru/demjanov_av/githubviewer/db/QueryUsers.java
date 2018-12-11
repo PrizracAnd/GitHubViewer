@@ -262,7 +262,7 @@ public class QueryUsers {
 
 
     /////////////////////////////////////////////////////
-    // Methods selectUsers
+    // Methods selectRepos
     ////////////////////////////////////////////////////
     public void selectRepos(String userId) {
         this.isTransact = true;
