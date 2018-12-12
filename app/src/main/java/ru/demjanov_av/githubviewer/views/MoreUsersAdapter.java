@@ -66,7 +66,7 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
     }
 
     private void supportClickItem(){
-        this.moreUsersFragment.onCallUser(this.moreUsers.get(getCurrentPosition()).getLogin());
+        this.moreUsersFragment.onCallUser(this.moreUsers.get(getCurrentPosition()).getId());
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
