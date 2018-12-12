@@ -62,12 +62,13 @@ public class MainActivity extends AppCompatActivity implements MoreUsersFragment
     @Override
     public void onClickUsers(String userId) {
         OneUsersFragment oneUsersFragment = new OneUsersFragment();
-        oneUsersFragment.setUserId(userId);
 
         fm.beginTransaction()
                 .replace(R.id.fragment_container, oneUsersFragment)
                 .addToBackStack(null)
                 .commit();
+
+        oneUsersFragment.setUserId(userId);
     }
 
     //-----End-------------------------------------------

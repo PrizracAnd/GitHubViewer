@@ -37,4 +37,16 @@ public class MigratorForRealm implements RealmMigration {
                     .addField(RealmModelRep.NAME_REP, String.class);
         }
     }
+
+
+    @Override
+    public int hashCode(){
+        return MigratorForRealm.class.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return object != null && object instanceof MigratorForRealm;
+
+    }
 }

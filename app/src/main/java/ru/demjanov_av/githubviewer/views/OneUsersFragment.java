@@ -96,6 +96,9 @@ public class OneUsersFragment extends Fragment implements MainView {
 
 
         presenter = new OneUsersPresenter(this, view.getContext());
+        if(this.userId != null){
+            presenter.setUserID(this.userId);
+        }
 //        presenter = new PresenterOneUser(this, view.getContext());
 //        presenter.startLoadData(this.userName);
 
@@ -215,8 +218,10 @@ public class OneUsersFragment extends Fragment implements MainView {
     //-----Begin-----------------------------------------
 
     public void setUserId(String userId) {
-//        this.userId = userId;
-        this.presenter.setUserID(userId);
+        this.userId = userId;
+        if(this.presenter != null) {
+            this.presenter.setUserID(userId);
+        }
     }
 
     //-----End-------------------------------------------

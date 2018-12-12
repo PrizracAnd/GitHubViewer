@@ -25,7 +25,7 @@ public class RealmInit {
     private void initRealm(Context context){
         Realm.init(context);
         this.configuration = new RealmConfiguration.Builder()
-                .schemaVersion(3)
+                .schemaVersion(4)
                 .migration(new MigratorForRealm())
                 .build();
         Realm.setDefaultConfiguration(this.configuration);
