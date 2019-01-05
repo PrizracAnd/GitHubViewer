@@ -47,7 +47,8 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.bind(this.moreUsers.get(position).getLogin());
+        holder.bind(position, this.moreUsers.get(position).getLogin());
+
     }
 
     @Override
@@ -55,18 +56,23 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
         return this.moreUsers.size();
     }
 
-    public int getCurrentPosition(){
-        return mvh.getSelectedPosition();
-    }
+//    public int getCurrentPosition(){
+////        return mvh.getSelectedPosition();
+//        return mvh.getAdapterPosition();
+//    }
 
+    //    private void supportClickItem(){
+//        this.moreUsersFragment.onCallUser(this.moreUsers.get(getCurrentPosition()).getId());
+//    }
 
     @Override
     public void onChange(Object o, OrderedCollectionChangeSet changeSet) {
         notifyDataSetChanged();
     }
 
-    private void supportClickItem(){
-        this.moreUsersFragment.onCallUser(this.moreUsers.get(getCurrentPosition()).getId());
+
+    private void supportClickItem(int position){
+        this.moreUsersFragment.onCallUser(this.moreUsers.get(position).getId());
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -76,20 +82,29 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
         public MyViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    supportClickItem();
+//                }
+//            });
 
         }
 
-        public void bind(String text){
+        public void bind(int position, String text){
             itemTextView.setText(text);
+            itemTextView.setTag(position);
         }
 
+        @Deprecated
         public int getSelectedPosition(){
             return this.getLayoutPosition();
         }
 
+
         @OnClick(R.id.more_users_item_text)
-        public void onClickItem(){
-            supportClickItem();
+        public void onClickItem(View v){
+            supportClickItem((int)v.getTag());
         }
 
     }

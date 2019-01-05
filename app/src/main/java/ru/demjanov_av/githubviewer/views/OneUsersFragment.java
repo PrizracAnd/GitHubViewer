@@ -154,22 +154,46 @@ public class OneUsersFragment extends Fragment implements MainView {
 
     @Override
     public void setData(int dataType) {
-        RealmModelUser realmModelUser = (presenter.getRealmModelUsers()).get(0);
-        List<RealmModelRep> realmModelRepList = presenter.getRealmModelReps();
+        switch (dataType){
+            case MainView.SET_USERS_DATA:
+                RealmModelUser realmModelUser = (presenter.getRealmModelUsers()).get(0);
+                if (realmModelUser != null) {
+                    loginText.setText(realmModelUser.getLogin());
+                    Glide.with(this)
+                            .load(realmModelUser.getAvatarUrl())
+                            .into(avatarImage);
+                    avatarImage.setVisibility(View.VISIBLE);
 
-        if (realmModelUser != null) {
-            loginText.setText(realmModelUser.getLogin());
-            Glide.with(this)
-                    .load(realmModelUser.getAvatarUrl())
-                    .into(avatarImage);
-            avatarImage.setVisibility(View.VISIBLE);
-
-            infoText.setText(getUserInfo(realmModelUser));
+                    infoText.setText(getUserInfo(realmModelUser));
+                }
+                break;
+            case MainView.SET_REPOS_DATA:
+                List<RealmModelRep> realmModelRepList = presenter.getRealmModelReps();
+                if(realmModelRepList != null && realmModelRepList.size() > 0){
+                    reposText.setText(getReposInfo(realmModelRepList));
+                }
+                break;
+            default:
+                break;
         }
 
-        if(realmModelRepList != null && realmModelRepList.size() > 0){
-            reposText.setText(getReposInfo(realmModelRepList));
-        }
+        //--------------!!!!!!!!!!!!------------------------------FIXME!!!
+//        RealmModelUser realmModelUser = (presenter.getRealmModelUsers()).get(0);
+//        List<RealmModelRep> realmModelRepList = presenter.getRealmModelReps();
+//
+//        if (realmModelUser != null) {
+//            loginText.setText(realmModelUser.getLogin());
+//            Glide.with(this)
+//                    .load(realmModelUser.getAvatarUrl())
+//                    .into(avatarImage);
+//            avatarImage.setVisibility(View.VISIBLE);
+//
+//            infoText.setText(getUserInfo(realmModelUser));
+//        }
+//
+//        if(realmModelRepList != null && realmModelRepList.size() > 0){
+//            reposText.setText(getReposInfo(realmModelRepList));
+//        }
 
     }
     //-----End-------------------------------------------

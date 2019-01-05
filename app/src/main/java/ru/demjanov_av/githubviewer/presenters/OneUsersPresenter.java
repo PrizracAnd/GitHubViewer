@@ -115,7 +115,7 @@ public class OneUsersPresenter extends MyPresenter {
         this.userID = userID;
 
         this.isDownloadNeed = true;
-        this.queryUsers.selectRepos(userID);
+        this.queryUsers.selectUser(userID);
         this.queryUsers.selectRepos(userID);
     }
 
@@ -187,8 +187,9 @@ public class OneUsersPresenter extends MyPresenter {
         switch (codeOperation){
             case QueryUsers.SELECT:
                 this.realmModelUsers = realmModelUsers;
-                this.isSelectUser = false;
-                onSelectedData();
+//                this.isSelectUser = false;
+//                onSelectedData();
+                this.oneUsersFragment.setData(MainView.SET_USERS_DATA);
                 break;
             case QueryUsers.INSERT_OR_UPDATE:
                 this.queryUsers.selectUser(this.userID);
@@ -203,8 +204,8 @@ public class OneUsersPresenter extends MyPresenter {
         switch (codeOperation){
             case QueryUsers.SELECT:
                 this.realmModelReps = realmModelReps;
-                this.isSelectRepos = false;
-                onSelectedData();
+//                this.isSelectRepos = false;
+//                onSelectedData();
                 break;
             case QueryUsers.INSERT_OR_UPDATE:
                 this.queryUsers.selectRepos(this.userID);
