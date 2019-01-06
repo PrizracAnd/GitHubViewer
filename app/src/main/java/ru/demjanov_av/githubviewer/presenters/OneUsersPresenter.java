@@ -115,8 +115,13 @@ public class OneUsersPresenter extends MyPresenter {
         this.userID = userID;
 
         this.isDownloadNeed = true;
+        this.isSelectUser = true;
+        this.isSelectRepos = true;
         this.queryUsers.selectUser(userID);
         this.queryUsers.selectRepos(userID);
+
+        //---Actualise data by download from net-begin---
+//        downloadData();
     }
 
     //-----End-------------------------------------------
@@ -126,10 +131,10 @@ public class OneUsersPresenter extends MyPresenter {
     // Method downloadData
     ////////////////////////////////////////////////////
     public void downloadData(){
-        if (realmModelUsers != null && realmModelUsers.size() > 0) {
+        if (!isDownloadUser && !isDownloadRepos && realmModelUsers != null && realmModelUsers.size() > 0) {
             this.oneUsersFragment.startLoad();
             this.isDownloadRepos = true;
-            this.isSelectUser = true;
+            this.isDownloadUser = true;
 
             Caller caller = new Caller(this.context,this);
 
@@ -153,6 +158,8 @@ public class OneUsersPresenter extends MyPresenter {
         this.isDownloadUser = isDownload;
         this.isSelectUser = true;
         this.queryUsers.insertUsersData(retrofitModelList);
+
+        onDownloadComplete();
     }
 
 
@@ -162,9 +169,10 @@ public class OneUsersPresenter extends MyPresenter {
         this.isDownloadRepos = isDownload;
 
         this.isSelectRepos = true;
-        this.queryUsers.insertReposData(retrofitModelRepList);
+        this.queryUsers.insertReposData(retrofitModelRepList, this.userID);
 
 //        this.oneUsersFragment.endLoad();
+        onDownloadComplete();
     }
 
 
@@ -187,9 +195,9 @@ public class OneUsersPresenter extends MyPresenter {
         switch (codeOperation){
             case QueryUsers.SELECT:
                 this.realmModelUsers = realmModelUsers;
-//                this.isSelectUser = false;
-//                onSelectedData();
+                this.isSelectUser = false;
                 this.oneUsersFragment.setData(MainView.SET_USERS_DATA);
+                onSelectedData();
                 break;
             case QueryUsers.INSERT_OR_UPDATE:
                 this.queryUsers.selectUser(this.userID);
@@ -204,8 +212,9 @@ public class OneUsersPresenter extends MyPresenter {
         switch (codeOperation){
             case QueryUsers.SELECT:
                 this.realmModelReps = realmModelReps;
-//                this.isSelectRepos = false;
-//                onSelectedData();
+                this.isSelectRepos = false;
+                this.oneUsersFragment.setData(MainView.SET_REPOS_DATA);
+                onSelectedData();
                 break;
             case QueryUsers.INSERT_OR_UPDATE:
                 this.queryUsers.selectRepos(this.userID);
@@ -224,15 +233,28 @@ public class OneUsersPresenter extends MyPresenter {
 
 
     /////////////////////////////////////////////////////
-    // Method isSelectedData
+    // Method onSelectedData
     ////////////////////////////////////////////////////
     private void onSelectedData() {
-        if(!this.isSelectUser && !this.isSelectRepos ){ //--Проверяем, получены ли все данные из БД
+        if(!this.isSelectUser && !this.isSelectRepos && this.isDownloadNeed){   //--Проверяем, получены ли все данные из БД и требуется ли их актуализация
+//            this.isDownloadNeed = false;                                        //--сбрасываем флаг требования автоактуализации, чтоб избежать возможного зацикливания
+            downloadData();                                                     //--запрашиваем данные из сети
+//            this.oneUsersFragment.endLoad();
+//            this.oneUsersFragment.setData(0);
+//            if(this.isDownloadNeed){
+//                downloadData();
+//            }
+        }
+    }
+
+
+
+    /////////////////////////////////////////////////////
+    // Method onDownloadComplete
+    ////////////////////////////////////////////////////
+    private void onDownloadComplete(){
+        if(!isDownloadUser && !isDownloadRepos){
             this.oneUsersFragment.endLoad();
-            this.oneUsersFragment.setData(0);
-            if(this.isDownloadNeed){
-                downloadData();
-            }
         }
     }
 

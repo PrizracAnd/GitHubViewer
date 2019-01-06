@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -171,6 +173,7 @@ public class OneUsersFragment extends Fragment implements MainView {
                 List<RealmModelRep> realmModelRepList = presenter.getRealmModelReps();
                 if(realmModelRepList != null && realmModelRepList.size() > 0){
                     reposText.setText(getReposInfo(realmModelRepList));
+//                    reposText.setVisibility(View.VISIBLE);
                 }
                 break;
             default:

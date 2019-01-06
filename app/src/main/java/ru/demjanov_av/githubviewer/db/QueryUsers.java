@@ -140,8 +140,9 @@ public class QueryUsers {
     /////////////////////////////////////////////////////
     // Method insertReposData
     ////////////////////////////////////////////////////
-    public void insertReposData(List<RetrofitModelRep> listRepos){
+    public void insertReposData(List<RetrofitModelRep> listRepos, String userID){
         this.isTransact = true;
+
         Completable completable = Completable.create(emitter ->{
             Realm realm = Realm.getInstance(this.realmConfiguration);
             for (RetrofitModelRep item : listRepos) {
@@ -150,7 +151,8 @@ public class QueryUsers {
                     RealmModelRep realmModelRep = new RealmModelRep();
                     realmModelRep.setRepId(item.getId());
                     realmModelRep.setNameRep(item.getName());
-                    realmModelRep.setUserId(item.getUserId());
+//                    realmModelRep.setUserId(item.getUserId());
+                    realmModelRep.setUserId(userID);
                     realm.insertOrUpdate(realmModelRep);
                     realm.commitTransaction();
                 }catch (Exception e) {
