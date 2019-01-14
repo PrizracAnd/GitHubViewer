@@ -114,14 +114,14 @@ public class OneUsersPresenter extends MyPresenter {
     public void setUserID(String userID) {
         this.userID = userID;
 
-        this.isDownloadNeed = true;
-        this.isSelectUser = true;
-        this.isSelectRepos = true;
-        this.queryUsers.selectUser(userID);
-        this.queryUsers.selectRepos(userID);
+//        this.isDownloadNeed = true;
+//        this.isSelectUser = true;
+//        this.isSelectRepos = true;
+//        this.queryUsers.selectUser(userID);
+//        this.queryUsers.selectRepos(userID);
 
         //---Actualise data by download from net-begin---
-//        downloadData();
+        downloadData();
     }
 
     //-----End-------------------------------------------
@@ -131,19 +131,27 @@ public class OneUsersPresenter extends MyPresenter {
     // Method downloadData
     ////////////////////////////////////////////////////
     public void downloadData(){
-        if (!isDownloadUser && !isDownloadRepos && realmModelUsers != null && realmModelUsers.size() > 0) {
-            this.oneUsersFragment.startLoad();
-            this.isDownloadRepos = true;
-            this.isDownloadUser = true;
+        if(realmModelUsers == null){
+            this.isDownloadNeed = true;
+            this.isSelectUser = true;
+            this.queryUsers.selectUser(this.userID);
+        }else {
+            if (!isDownloadUser && !isDownloadRepos && realmModelUsers != null && realmModelUsers.size() > 0) {
+                this.oneUsersFragment.startLoad();
+                this.isDownloadRepos = true;
+                this.isDownloadUser = true;
+                this.isSelectRepos = true;
+                this.isSelectUser = true;
 
-            Caller caller = new Caller(this.context,this);
+                Caller caller = new Caller(this.context, this);
 
-            String userName = this.realmModelUsers.get(0).getLogin();
+                String userName = this.realmModelUsers.get(0).getLogin();
 
-            caller.downloadUser(userName);
-            caller.downloadRepos(userName);
+                caller.downloadUser(userName);
+                caller.downloadRepos(userName);
 
-            this.isDownloadNeed = false;
+//            this.isDownloadNeed = false;
+            }
         }
     }
 
@@ -159,7 +167,7 @@ public class OneUsersPresenter extends MyPresenter {
         this.isSelectUser = true;
         this.queryUsers.insertUsersData(retrofitModelList);
 
-        onDownloadComplete();
+//        onDownloadComplete();
     }
 
 
@@ -172,7 +180,7 @@ public class OneUsersPresenter extends MyPresenter {
         this.queryUsers.insertReposData(retrofitModelRepList, this.userID);
 
 //        this.oneUsersFragment.endLoad();
-        onDownloadComplete();
+//        onDownloadComplete();
     }
 
 
@@ -180,8 +188,15 @@ public class OneUsersPresenter extends MyPresenter {
     public void onFail(Boolean isDownload, int codeMessage, @Nullable String message) {
         this.isDownloadUser = isDownload;
         this.isDownloadRepos = isDownload;
+
         this.oneUsersFragment.endLoad();
         this.oneUsersFragment.setError(codeMessage, message); // FIXME!!!!!!!!!!!!!!*****!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+        this.isSelectUser = true;
+        this.isSelectRepos = true;
+        this.queryUsers.selectUser(this.userID);
+        this.queryUsers.selectRepos(this.userID);
     }
     //-----End-------------------------------------------
 
@@ -197,7 +212,15 @@ public class OneUsersPresenter extends MyPresenter {
                 this.realmModelUsers = realmModelUsers;
                 this.isSelectUser = false;
                 this.oneUsersFragment.setData(MainView.SET_USERS_DATA);
-                onSelectedData();
+//                onSelectedData();
+                onSelectDataComplete();
+                //---------------+++------------------------
+                if(isDownloadNeed) {
+                    isDownloadNeed = false;
+                    downloadData();
+                }
+                //---------------+++------------------------
+
                 break;
             case QueryUsers.INSERT_OR_UPDATE:
                 this.queryUsers.selectUser(this.userID);
@@ -214,7 +237,8 @@ public class OneUsersPresenter extends MyPresenter {
                 this.realmModelReps = realmModelReps;
                 this.isSelectRepos = false;
                 this.oneUsersFragment.setData(MainView.SET_REPOS_DATA);
-                onSelectedData();
+//                onSelectedData();
+                onSelectDataComplete();
                 break;
             case QueryUsers.INSERT_OR_UPDATE:
                 this.queryUsers.selectRepos(this.userID);
@@ -252,8 +276,21 @@ public class OneUsersPresenter extends MyPresenter {
     /////////////////////////////////////////////////////
     // Method onDownloadComplete
     ////////////////////////////////////////////////////
-    private void onDownloadComplete(){
-        if(!isDownloadUser && !isDownloadRepos){
+//    private void onDownloadComplete(){
+//        if(!isDownloadUser && !isDownloadRepos){
+//            this.oneUsersFragment.endLoad();
+//        }
+//    }
+
+    private boolean onDownloadComplete(){
+        return (!isDownloadUser && !isDownloadRepos);
+    }
+
+    /////////////////////////////////////////////////////
+    // Method onSelectDataComplete
+    ////////////////////////////////////////////////////
+    private void onSelectDataComplete(){
+        if(onDownloadComplete() && !isSelectUser && !isSelectRepos){
             this.oneUsersFragment.endLoad();
         }
     }

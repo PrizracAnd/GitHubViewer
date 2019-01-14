@@ -73,6 +73,8 @@ public class MoreUsersPresenter  extends MyPresenter {
 //        updateLoadedUsers(this.realmResults.get(this.realmResults.size() - 1).getId());
         if(this.realmResults.size() > 0) {
             this.previous_id = this.realmResults.get(this.realmResults.size() - 1).getId();
+        }else{
+            downloadUsers();
         }
     }
 
