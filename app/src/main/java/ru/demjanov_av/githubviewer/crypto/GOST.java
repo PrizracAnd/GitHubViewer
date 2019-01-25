@@ -20,21 +20,25 @@ public class GOST {
     /* Открытый текст - fedcba9876543210 */
     private long nH = 0xfedcba98, nL = 0x76543210;
 
-    // Constructor
-    public GOST(long dataBlock, long[] keys, int[][] sBox){
-        this.dataBlock = dataBlock;
-        this.nL = dataBlock % C232;     // заполняем младшую часть
-        this.nH = dataBlock >>> 32;     // заполняем старшую чать (т.к. сдвиг с заполнением нулями, должно прокатить и так)
-        clearHi();
-
+    // Constructors
+    public GOST(long[] keys, int[][] sBox){
         this.keys = keys;
         this.sBox = sBox;
+    }
+
+    public GOST(long[] keys, int[][] sBox, long dataBlock){
+        this(keys, sBox);
+
+        this.dataBlock = dataBlock;
+        this.nL = dataBlock % C232;     // заполняем младшую часть
+        this.nH = dataBlock >>> 32;     // заполняем старшую чать (сдвиг с заполнением нулями)
+        clearHi();
 
     }
 
     /* Основной шаг криптопреобразования */
     private void round(long nLeft, long nRight, long roundKey){
-        long n, q;
+        long n;
         nLeft &= (C232-1);
         nRight &= (C232-1);
         roundKey &= (C232-1);
@@ -103,7 +107,7 @@ public class GOST {
         clearHi();
         this.dataBlock ^= this.dataBlock;       // очищаем переменнную
         this.dataBlock |= this.nH << 32;        // заполням сначала из старшей части со здвигом на 32 разряда
-        this.dataBlock |= this.nL;
+        this.dataBlock |= this.nL;              // заполням из младшей части
 
         return dataBlock;
     }
@@ -111,7 +115,7 @@ public class GOST {
     public void setDataBlock(long dataBlock) {
         this.dataBlock = dataBlock;
         this.nL = dataBlock % C232;     // заполняем младшую часть
-        this.nH = dataBlock >>> 32;     // заполняем старшую чать (т.к. сдвиг с заполнением нулями, должно прокатить и так)
+        this.nH = dataBlock >>> 32;     // заполняем старшую чать (сдвиг с заполнением нулями)
         clearHi();
     }
 
