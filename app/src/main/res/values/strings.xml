@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">GitHubViewer</string>
     <string name="users">Users</string>
+    <string name="repos">Repositories</string>
     <string name="loadPage">Load users</string>
     <string name="loadMore">Load more users</string>
     <string name="download_page">Download page</string>
