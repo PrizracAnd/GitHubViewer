@@ -22,6 +22,7 @@ import ru.demjanov_av.githubviewer.models.RealmModelUser;
 public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyViewHolder> implements OrderedRealmCollectionChangeListener {
     //-----Constants begin-------------------------------
     private final static int HEADER_VIEW = 0;
+    private final static int ITEM_VIEW = 1;
     private final static String ADAPTER = "MORE_USERS_ADAPTER";
     //-----Constants end---------------------------------
 
@@ -46,15 +47,35 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
     //---------------------------------------------------
     //---------------------------------------------------
 
+
     /////////////////////////////////////////////////////
     // Constructor of MoreUsersAdapter
     ////////////////////////////////////////////////////
-    public MoreUsersAdapter(RealmResults<RealmModelUser> moreUsers, MoreUsersFragment moreUsersFragment) {
+    MoreUsersAdapter(RealmResults<RealmModelUser> moreUsers, MoreUsersFragment moreUsersFragment) {
         this.moreUsers = moreUsers;
         this.moreUsers.addChangeListener(this);
 
         this.moreUsersFragment = moreUsersFragment;
     }
+
+
+    /////////////////////////////////////////////////////
+    // Methods of getItemViewType
+    ////////////////////////////////////////////////////
+    //-----Begin-----------------------------------------
+    @Override
+    public int getItemViewType(int position) {
+        if (isPositionHeader(position)) {
+            return HEADER_VIEW;
+        }
+
+        return ITEM_VIEW;
+    }
+
+    private boolean isPositionHeader(int position) {
+        return position == 0;
+    }
+    //-----End-------------------------------------------
 
 
     /////////////////////////////////////////////////////
@@ -92,7 +113,11 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
         try {
             if(holder instanceof ItemViewHolder) {
                 ItemViewHolder ivh = (ItemViewHolder) holder;
-                ivh.bind(position, this.moreUsers.get(position).getLogin());
+                if(position > 0) {
+                    ivh.bind(position, this.moreUsers.get(position - 1).getLogin());
+                } else { // условие, по идее, избыточное, но надежность
+                    ivh.bind(position, this.moreUsers.get(position).getLogin());
+                }
             }else if (holder instanceof  HeaderViewHolder){
                 HeaderViewHolder hvh = (HeaderViewHolder) holder;
             }
@@ -159,7 +184,7 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
         @BindView(R.id.more_users_item_text)
         TextView itemTextView;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
 //            ButterKnife.bind(this, itemView);
 //            itemView.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +196,7 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
 
         }
 
-        public void bind(int position, String text){
+        void bind(int position, String text){
             ButterKnife.bind(this, itemView);
             itemTextView.setText(text);
             itemTextView.setTag(position);
@@ -196,7 +221,7 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
     // Class HeaderViewHolder
     ////////////////////////////////////////////////////
     public class HeaderViewHolder extends MyViewHolder {
-        public HeaderViewHolder(View itemView) {
+        HeaderViewHolder(View itemView) {
             super(itemView);
         }
     }
@@ -207,7 +232,7 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
     // Class ItemViewHolder
     ////////////////////////////////////////////////////
     public class ItemViewHolder extends MyViewHolder {
-        public ItemViewHolder(View itemView) {
+        ItemViewHolder(View itemView) {
             super(itemView);
         }
 
