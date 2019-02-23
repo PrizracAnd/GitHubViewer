@@ -20,14 +20,18 @@ import ru.demjanov_av.githubviewer.presenters.MoreUsersPresenter;
 
 
 public class MoreUsersFragment extends Fragment implements MoreUsersAdapter.MoreUsersCall, MainView {
-
+    //-----Constants begin-------------------------------
     private final static String KEY_PARCELABLE = "key_parcelable";
+    //-----Constants end---------------------------------
 
-    private static Bundle bundleState = null;
 
+    //-----Class variables begin-------------------------
     private View view;
     private MoreUsersPresenter presenter;
     private ClickListenerUsers mainActivity;
+    private static Bundle bundleState = null;
+    //-----Class variables end---------------------------
+
 
     //-----View elements variables begin-----------------
     @BindView(R.id.more_users_recycle)

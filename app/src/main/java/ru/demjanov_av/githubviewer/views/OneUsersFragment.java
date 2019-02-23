@@ -30,8 +30,12 @@ import ru.demjanov_av.githubviewer.presenters.OneUsersPresenter;
 
 
 public class OneUsersFragment extends Fragment implements MainView {
+    //-----Constants begin-------------------------------
+    private final static String KEY_USER_ID = "key_user_id";
+    //-----Constants end---------------------------------
 
-    ////http://developer.alexanderklimov.ru/android/layout/swiperefreshlayout.php FIXME !!!!!!!!!!!
+
+    //-----View elements variables begin-----------------
     @BindView(R.id.login_text)
     TextView loginText;
 
@@ -46,15 +50,19 @@ public class OneUsersFragment extends Fragment implements MainView {
 
     @BindView(R.id.sr_layout_ouf)
     SwipeRefreshLayout swipeRefreshLayout;
+    //-----View elements variables end-------------------
 
-//    @BindView(R.id.progressBarOne)
-//    ProgressBar progressBar;
 
+    //-----Class variables begin-------------------------
     private String userId;
     private OneUsersPresenter presenter;
     private View rootView;
+    //-----Class variables begin-------------------------
 
 
+    /////////////////////////////////////////////////////
+    // Method onCreateView
+    ////////////////////////////////////////////////////
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
         this.rootView = inflater.inflate(R.layout.fragment_one_users, viewGroup, false);
@@ -63,6 +71,9 @@ public class OneUsersFragment extends Fragment implements MainView {
     }
 
 
+    /////////////////////////////////////////////////////
+    // Method onStart
+    ////////////////////////////////////////////////////
     @Override
     public void onStart() {
         super.onStart();
@@ -98,12 +109,7 @@ public class OneUsersFragment extends Fragment implements MainView {
         if(this.userId != null){
             presenter.setUserID(this.userId);
         }
-//        presenter = new PresenterOneUser(this, view.getContext());
-//        presenter.startLoadData(this.userName);
-
     }
-
-
 
 
 
@@ -176,25 +182,6 @@ public class OneUsersFragment extends Fragment implements MainView {
             default:
                 break;
         }
-
-        //--------------!!!!!!!!!!!!------------------------------FIXME!!!
-//        RealmModelUser realmModelUser = (presenter.getRealmModelUsers()).get(0);
-//        List<RealmModelRep> realmModelRepList = presenter.getRealmModelReps();
-//
-//        if (realmModelUser != null) {
-//            loginText.setText(realmModelUser.getLogin());
-//            Glide.with(this)
-//                    .load(realmModelUser.getAvatarUrl())
-//                    .into(avatarImage);
-//            avatarImage.setVisibility(View.VISIBLE);
-//
-//            infoText.setText(getUserInfo(realmModelUser));
-//        }
-//
-//        if(realmModelRepList != null && realmModelRepList.size() > 0){
-//            reposText.setText(getReposInfo(realmModelRepList));
-//        }
-
     }
     //-----End-------------------------------------------
 
@@ -227,7 +214,7 @@ public class OneUsersFragment extends Fragment implements MainView {
                     .append("\n");
         }
         sb
-                .delete((sb.length() - 3), (sb.length()-1))
+                .delete((sb.length() - 2), (sb.length()))
                 .append(".");
 
 
@@ -247,6 +234,5 @@ public class OneUsersFragment extends Fragment implements MainView {
             this.presenter.setUserID(userId);
         }
     }
-
     //-----End-------------------------------------------
 }

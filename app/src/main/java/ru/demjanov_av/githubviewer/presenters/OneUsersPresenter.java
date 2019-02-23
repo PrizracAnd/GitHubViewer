@@ -3,6 +3,8 @@ package ru.demjanov_av.githubviewer.presenters;
 import android.content.Context;
 import android.support.annotation.Nullable;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -114,12 +116,6 @@ public class OneUsersPresenter extends MyPresenter {
     public void setUserID(String userID) {
         this.userID = userID;
 
-//        this.isDownloadNeed = true;
-//        this.isSelectUser = true;
-//        this.isSelectRepos = true;
-//        this.queryUsers.selectUser(userID);
-//        this.queryUsers.selectRepos(userID);
-
         //---Actualise data by download from net-begin---
         downloadData();
     }
@@ -136,7 +132,7 @@ public class OneUsersPresenter extends MyPresenter {
             this.isSelectUser = true;
             this.queryUsers.selectUser(this.userID);
         }else {
-            if (!isDownloadUser && !isDownloadRepos && realmModelUsers != null && realmModelUsers.size() > 0) {
+            if (!isDownloadUser && !isDownloadRepos && realmModelUsers.size() > 0) {
                 this.oneUsersFragment.startLoad();
                 this.isDownloadRepos = true;
                 this.isDownloadUser = true;
@@ -166,8 +162,6 @@ public class OneUsersPresenter extends MyPresenter {
         this.isDownloadUser = isDownload;
         this.isSelectUser = true;
         this.queryUsers.insertUsersData(retrofitModelList);
-
-//        onDownloadComplete();
     }
 
 
@@ -178,9 +172,6 @@ public class OneUsersPresenter extends MyPresenter {
 
         this.isSelectRepos = true;
         this.queryUsers.insertReposData(retrofitModelRepList, this.userID);
-
-//        this.oneUsersFragment.endLoad();
-//        onDownloadComplete();
     }
 
 
@@ -263,11 +254,6 @@ public class OneUsersPresenter extends MyPresenter {
         if(!this.isSelectUser && !this.isSelectRepos && this.isDownloadNeed){   //--Проверяем, получены ли все данные из БД и требуется ли их актуализация
 //            this.isDownloadNeed = false;                                        //--сбрасываем флаг требования автоактуализации, чтоб избежать возможного зацикливания
             downloadData();                                                     //--запрашиваем данные из сети
-//            this.oneUsersFragment.endLoad();
-//            this.oneUsersFragment.setData(0);
-//            if(this.isDownloadNeed){
-//                downloadData();
-//            }
         }
     }
 
@@ -276,12 +262,7 @@ public class OneUsersPresenter extends MyPresenter {
     /////////////////////////////////////////////////////
     // Method onDownloadComplete
     ////////////////////////////////////////////////////
-//    private void onDownloadComplete(){
-//        if(!isDownloadUser && !isDownloadRepos){
-//            this.oneUsersFragment.endLoad();
-//        }
-//    }
-
+    @Contract(pure = true)
     private boolean onDownloadComplete(){
         return (!isDownloadUser && !isDownloadRepos);
     }
@@ -293,6 +274,15 @@ public class OneUsersPresenter extends MyPresenter {
         if(onDownloadComplete() && !isSelectUser && !isSelectRepos){
             this.oneUsersFragment.endLoad();
         }
+    }
+
+
+    /////////////////////////////////////////////////////
+    // Method destroy
+    ////////////////////////////////////////////////////
+    public void destroy(){
+        this.queryUsers.destroy();
+        this.realm.close();
     }
 
 }
