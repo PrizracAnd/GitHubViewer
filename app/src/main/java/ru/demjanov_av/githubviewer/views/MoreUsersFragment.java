@@ -2,6 +2,7 @@ package ru.demjanov_av.githubviewer.views;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-//import android.widget.ProgressBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,24 +21,18 @@ import ru.demjanov_av.githubviewer.presenters.MoreUsersPresenter;
 
 public class MoreUsersFragment extends Fragment implements MoreUsersAdapter.MoreUsersCall, MainView {
 
+    private final static String KEY_PARCELABLE = "key_parcelable";
+
+    private static Bundle bundleState = null;
+
     private View view;
     private MoreUsersPresenter presenter;
-    private MoreUsersAdapter myAdapter;
     private ClickListenerUsers mainActivity;
 
     //-----View elements variables begin-----------------
-//    @BindView(R.id.progressBarMore)
-//    ProgressBar progressBar;
-
     @BindView(R.id.more_users_recycle)
     RecyclerView recyclerView;
     //-----View elements variables end-------------------
-
-
-    //-----Flags variables begin-------------------------
-    private boolean isLoad = false;
-    private boolean isInitializeRecycler = false;
-    //-----Flags variables End---------------------------
 
 
     /////////////////////////////////////////////////////
@@ -64,6 +58,7 @@ public class MoreUsersFragment extends Fragment implements MoreUsersAdapter.More
     ////////////////////////////////////////////////////
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
+
         this.view = inflater.inflate(R.layout.fragment_more_users, viewGroup, false);
 
         return view;
@@ -98,6 +93,8 @@ public class MoreUsersFragment extends Fragment implements MoreUsersAdapter.More
         initializeRecycler(view);
         //---RecyclerView_end---
 
+
+
     }
 
 
@@ -105,10 +102,9 @@ public class MoreUsersFragment extends Fragment implements MoreUsersAdapter.More
     // Method initializeRecycler
     ////////////////////////////////////////////////////
     private void initializeRecycler(View view){
-        this.isInitializeRecycler = true;
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         //передаем в адаптер RealmResults для автообновления и наш MoreUsersFragment для обратной связи
-        myAdapter = new MoreUsersAdapter(this.presenter.getResults(), this);
+        MoreUsersAdapter myAdapter = new MoreUsersAdapter(this.presenter.getResults(), this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(myAdapter);
 
@@ -134,13 +130,34 @@ public class MoreUsersFragment extends Fragment implements MoreUsersAdapter.More
     }
 
 
+    // сохраняем прокрутку рециклера
     /////////////////////////////////////////////////////
-    // Method onClickBtnLoad
+    // Method onPause
     ////////////////////////////////////////////////////
-//    @OnClick(R.id.btnLoad)
-//    public void onClickBtnLoad(){
-//        this.presenter.downloadUsers();
-//    }
+    @Override
+    public void onPause() {
+        bundleState = new Bundle(); // !!!обратите внимание на объявление переменной bundleState в разделе переменных класса (выше по тексту)
+        Parcelable state = recyclerView.getLayoutManager().onSaveInstanceState();
+        bundleState.putParcelable(KEY_PARCELABLE, state);
+        super.onPause();
+    }
+
+
+    // восстанавливаем прокрутку рециклера (да, именно здесь!)
+    /////////////////////////////////////////////////////
+    // Method onResume
+    ////////////////////////////////////////////////////
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        if(bundleState != null){
+            Parcelable state = bundleState.getParcelable(KEY_PARCELABLE);
+            recyclerView.getLayoutManager().onRestoreInstanceState(state);
+        }
+
+    }
 
 
     /////////////////////////////////////////////////////
@@ -154,25 +171,21 @@ public class MoreUsersFragment extends Fragment implements MoreUsersAdapter.More
 
     @Override
     public void startLoad() {
-        this.isLoad = true;
-//        progressBar.setVisibility(View.VISIBLE);
-//        recyclerView.setVisibility(View.GONE);
+
     }
+
 
     @Override
     public void endLoad() {
-        this.isLoad = false;
-//        if(!this.isInitializeRecycler) initializeRecycler(this.view);
-
-//        progressBar.setVisibility(View.GONE);
-//        recyclerView.setVisibility(View.VISIBLE);
 
     }
+
 
     @Override
     public void setError(int number, @Nullable String message) {
 
     }
+
 
     @Override
     public void setData(int dataType) {
