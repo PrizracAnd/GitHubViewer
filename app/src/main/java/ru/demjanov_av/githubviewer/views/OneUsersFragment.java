@@ -54,9 +54,10 @@ public class OneUsersFragment extends Fragment implements MainView {
 
 
     //-----Class variables begin-------------------------
-    private String userId;
+    private String userId = null;
     private OneUsersPresenter presenter;
     private View rootView;
+    private static Bundle bundleState = null;
     //-----Class variables begin-------------------------
 
 
@@ -79,6 +80,33 @@ public class OneUsersFragment extends Fragment implements MainView {
         super.onStart();
 
         initializeElements(this.rootView);
+    }
+
+
+    /////////////////////////////////////////////////////
+    // Method onPause
+    ////////////////////////////////////////////////////
+    @Override
+    public void onPause() {
+        bundleState = new Bundle();
+        bundleState.putString(KEY_USER_ID, this.userId);
+        super.onPause();
+    }
+
+
+    // восстанавливаем прокрутку рециклера (да, именно здесь!)
+    /////////////////////////////////////////////////////
+    // Method onResume
+    ////////////////////////////////////////////////////
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        if(this.userId == null && bundleState != null){
+            String user_id = bundleState.getString(KEY_USER_ID);
+            setUserId(user_id);
+        }
     }
 
 
@@ -120,22 +148,17 @@ public class OneUsersFragment extends Fragment implements MainView {
     @Override
     public void startLoad() {
         swipeRefreshLayout.setRefreshing(true);
-//        loginText.setVisibility(View.GONE);
-//        infoText.setVisibility(View.GONE);
-//        avatarImage.setVisibility(View.GONE);
     }
+
 
     @Override
     public void endLoad() {
         swipeRefreshLayout.setRefreshing(false);
-//        loginText.setVisibility(View.VISIBLE);
-//        infoText.setVisibility(View.VISIBLE);
-//        avatarImage.setVisibility(View.VISIBLE);
     }
+
 
     @Override
     public void setError(int number, @Nullable String message) {
-//        loginText.setText(this.userName);
 
         Context context = this.rootView.getContext().getApplicationContext();
 
@@ -156,6 +179,7 @@ public class OneUsersFragment extends Fragment implements MainView {
         }
 
     }
+
 
     @Override
     public void setData(int dataType) {
@@ -203,6 +227,7 @@ public class OneUsersFragment extends Fragment implements MainView {
         return sb.toString();
     }
 
+
     @NonNull
     private String getReposInfo(List<RealmModelRep> realmModelRepList){
 
@@ -235,4 +260,16 @@ public class OneUsersFragment extends Fragment implements MainView {
         }
     }
     //-----End-------------------------------------------
+
+
+    /////////////////////////////////////////////////////
+    // Method onDestroy
+    ////////////////////////////////////////////////////
+    @Override
+    public void onDestroy() {
+
+        this.presenter.destroy();
+
+        super.onDestroy();
+    }
 }
