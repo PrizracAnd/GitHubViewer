@@ -8,8 +8,8 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-import demjanov.av.ru.allegedcodeproject.crypto.supports.Converters;
-import demjanov.av.ru.allegedcodeproject.save_load.Preferencer;
+import ru.demjanov_av.githubviewer.crypto.supports.Converters;
+import ru.demjanov_av.githubviewer.save_load.Preferencer;
 
 
 /**
