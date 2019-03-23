@@ -7,11 +7,16 @@ import android.os.Bundle;
 
 import ru.demjanov_av.githubviewer.views.MoreUsersFragment;
 import ru.demjanov_av.githubviewer.views.OneUsersFragment;
+import ru.demjanov_av.githubviewer.views.PswFragment;
 
 
-public class MainActivity extends AppCompatActivity implements MoreUsersFragment.ClickListenerUsers {
+public class MainActivity extends AppCompatActivity implements PswFragment.EnterCodeSuccess, MoreUsersFragment.ClickListenerUsers {
 
+    //-----Class variables begin--------------------------
     private FragmentManager fm;
+    private byte[] keySpecBytes;
+    //-----Class variables end----------------------------
+
 
     /////////////////////////////////////////////////////
     // Method onCreate
@@ -31,13 +36,18 @@ public class MainActivity extends AppCompatActivity implements MoreUsersFragment
     private void initializeElements() {
         fm = getSupportFragmentManager();
 
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-        if(fragment == null){
-            fragment = new MoreUsersFragment();
-            fm.beginTransaction()
-                    .add(R.id.fragment_container, fragment)
-                    .commit();
-        }
+//        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+//        if(fragment == null){
+//            fragment = new MoreUsersFragment();
+//            fm.beginTransaction()
+//                    .add(R.id.fragment_container, fragment)
+//                    .commit();
+//        }
+
+        //  переписано именно так потому, что при старте приложения ВСЕГДА затавляем вводить ПИН
+        fm.beginTransaction()
+                .add(R.id.fragment_container, new PswFragment())
+                .commit();
     }
 
 
@@ -51,13 +61,20 @@ public class MainActivity extends AppCompatActivity implements MoreUsersFragment
         super.onDestroy();
     }
 
-    
-
 
     /////////////////////////////////////////////////////
     // Methods of interfaces
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
+    @Override
+    public void onEnterCode(byte[] keySpecBytes) {
+        this.keySpecBytes = keySpecBytes;
+
+        MoreUsersFragment muf = new MoreUsersFragment();
+        fm.beginTransaction()
+                .replace(R.id.fragment_container, muf)
+                .commit();
+    }
 
     @Override
     public void onClickUsers(String userId) {
@@ -70,6 +87,5 @@ public class MainActivity extends AppCompatActivity implements MoreUsersFragment
 
         oneUsersFragment.setUserId(userId);
     }
-
     //-----End-------------------------------------------
 }
