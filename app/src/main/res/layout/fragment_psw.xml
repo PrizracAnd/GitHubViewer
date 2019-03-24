@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -87,7 +88,7 @@
     <TableLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
 
@@ -100,39 +101,39 @@
             <Button
                 android:id="@+id/button_7"
                 style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:layout_marginStart="@dimen/default_margin_mini"
                 android:layout_marginBottom="@dimen/default_margin_mini"
+                android:layout_marginStart="@dimen/default_margin_mini"
+                android:layout_weight="0.33"
                 android:background="@android:color/darker_gray"
                 android:text="@string/number_7"
-                android:textColor="@android:color/black"
-                android:layout_width="match_parent" />
+                android:textColor="@android:color/black" />
 
             <Button
                 android:id="@+id/button_8"
                 style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:layout_marginStart="@dimen/default_margin_mini"
-                android:layout_marginEnd="@dimen/default_margin_mini"
                 android:layout_marginBottom="@dimen/default_margin_mini"
+                android:layout_marginEnd="@dimen/default_margin_mini"
+                android:layout_marginStart="@dimen/default_margin_mini"
+                android:layout_weight="0.33"
                 android:background="@android:color/darker_gray"
                 android:text="@string/number_8"
-                android:textColor="@android:color/black"
-                android:layout_width="match_parent" />
+                android:textColor="@android:color/black" />
 
             <Button
                 android:id="@+id/button_9"
                 style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:layout_marginEnd="@dimen/default_margin_mini"
                 android:layout_marginBottom="@dimen/default_margin_mini"
+                android:layout_marginEnd="@dimen/default_margin_mini"
+                android:layout_weight="0.33"
                 android:background="@android:color/darker_gray"
                 android:text="@string/number_9"
-                android:textColor="@android:color/black"
-                android:layout_width="match_parent" />
+                android:textColor="@android:color/black" />
         </TableRow>
 
         <TableRow
@@ -142,39 +143,39 @@
             <Button
                 android:id="@+id/button_4"
                 style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:layout_marginStart="@dimen/default_margin_mini"
                 android:layout_marginBottom="@dimen/default_margin_mini"
+                android:layout_marginStart="@dimen/default_margin_mini"
+                android:layout_weight="0.33"
                 android:background="@android:color/darker_gray"
                 android:text="@string/number_4"
-                android:textColor="@android:color/black"
-                android:layout_width="match_parent" />
+                android:textColor="@android:color/black" />
 
             <Button
                 android:id="@+id/button_5"
                 style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:layout_marginStart="@dimen/default_margin_mini"
-                android:layout_marginEnd="@dimen/default_margin_mini"
                 android:layout_marginBottom="@dimen/default_margin_mini"
+                android:layout_marginEnd="@dimen/default_margin_mini"
+                android:layout_marginStart="@dimen/default_margin_mini"
+                android:layout_weight="0.33"
                 android:background="@android:color/darker_gray"
                 android:text="@string/number_5"
-                android:textColor="@android:color/black"
-                android:layout_width="match_parent" />
+                android:textColor="@android:color/black" />
 
             <Button
                 android:id="@+id/button_6"
                 style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:layout_marginEnd="@dimen/default_margin_mini"
                 android:layout_marginBottom="@dimen/default_margin_mini"
+                android:layout_marginEnd="@dimen/default_margin_mini"
+                android:layout_weight="0.33"
                 android:background="@android:color/darker_gray"
                 android:text="@string/number_6"
-                android:textColor="@android:color/black"
-                android:layout_width="match_parent" />
+                android:textColor="@android:color/black" />
         </TableRow>
 
         <TableRow
@@ -184,39 +185,39 @@
             <Button
                 android:id="@+id/button_1"
                 style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:layout_marginStart="@dimen/default_margin_mini"
                 android:layout_marginBottom="@dimen/default_margin_mini"
+                android:layout_marginStart="@dimen/default_margin_mini"
+                android:layout_weight="0.33"
                 android:background="@android:color/darker_gray"
                 android:text="@string/number_1"
-                android:textColor="@android:color/black"
-                android:layout_width="match_parent" />
+                android:textColor="@android:color/black" />
 
             <Button
                 android:id="@+id/button_2"
                 style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:layout_marginStart="@dimen/default_margin_mini"
-                android:layout_marginEnd="@dimen/default_margin_mini"
                 android:layout_marginBottom="@dimen/default_margin_mini"
+                android:layout_marginEnd="@dimen/default_margin_mini"
+                android:layout_marginStart="@dimen/default_margin_mini"
+                android:layout_weight="0.33"
                 android:background="@android:color/darker_gray"
                 android:text="@string/number_2"
-                android:textColor="@android:color/black"
-                android:layout_width="match_parent" />
+                android:textColor="@android:color/black" />
 
             <Button
                 android:id="@+id/button_3"
                 style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:layout_marginEnd="@dimen/default_margin_mini"
                 android:layout_marginBottom="@dimen/default_margin_mini"
+                android:layout_marginEnd="@dimen/default_margin_mini"
+                android:layout_weight="0.33"
                 android:background="@android:color/darker_gray"
                 android:text="@string/number_3"
-                android:textColor="@android:color/black"
-                android:layout_width="match_parent" />
+                android:textColor="@android:color/black" />
         </TableRow>
 
         <TableRow
@@ -226,38 +227,38 @@
             <Button
                 android:id="@+id/button_clear"
                 style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:layout_marginStart="@dimen/default_margin_mini"
                 android:layout_marginBottom="@dimen/default_margin_mini"
+                android:layout_marginStart="@dimen/default_margin_mini"
+                android:layout_weight="0.33"
                 android:background="@android:color/darker_gray"
-                android:text="@string/number_clear"
-                android:layout_width="match_parent" />
+                android:text="@string/number_clear" />
 
             <Button
                 android:id="@+id/button_0"
                 style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:layout_marginStart="@dimen/default_margin_mini"
-                android:layout_marginEnd="@dimen/default_margin_mini"
                 android:layout_marginBottom="@dimen/default_margin_mini"
+                android:layout_marginEnd="@dimen/default_margin_mini"
+                android:layout_marginStart="@dimen/default_margin_mini"
+                android:layout_weight="0.33"
                 android:background="@android:color/darker_gray"
                 android:text="@string/number_0"
-                android:textColor="@android:color/black"
-                android:layout_width="match_parent" />
+                android:textColor="@android:color/black" />
 
             <Button
                 android:id="@+id/button_back"
                 style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.33"
-                android:layout_marginEnd="@dimen/default_margin_mini"
                 android:layout_marginBottom="@dimen/default_margin_mini"
+                android:layout_marginEnd="@dimen/default_margin_mini"
+                android:layout_weight="0.33"
                 android:background="@android:color/darker_gray"
                 android:text="@string/number_back"
-                android:textColor="@android:color/holo_orange_light"
-                android:layout_width="match_parent" />
+                android:textColor="@android:color/holo_orange_light" />
         </TableRow>
     </TableLayout>
 </android.support.constraint.ConstraintLayout>

@@ -258,9 +258,6 @@ public class PswFragment extends Fragment implements MainView, FragmentDialogYes
         enterCodeClear();
     }
 
-
-    @OnClick(R.id.emergency_switcher)           //Fixme This for test only!!!!!!!
-    public void onEM(){onBackDYN(true);}
     //-----End-------------------------------------------
 
 

@@ -36,15 +36,15 @@ public class MainActivity extends AppCompatActivity implements PswFragment.Enter
     private void initializeElements() {
         fm = getSupportFragmentManager();
 
-//        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-//        if(fragment == null){
-//            fragment = new MoreUsersFragment();
-//            fm.beginTransaction()
-//                    .add(R.id.fragment_container, fragment)
-//                    .commit();
-//        }
-
         //  переписано именно так потому, что при старте приложения ВСЕГДА затавляем вводить ПИН
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+        if(fragment != null){
+            fm.beginTransaction()
+                    .remove(fragment)
+                    .commit();
+        }
+
+
         fm.beginTransaction()
                 .add(R.id.fragment_container, new PswFragment())
                 .commit();
