@@ -171,7 +171,6 @@ public class OneUsersFragment extends Fragment implements MainView {
                 Toast.makeText(context, context.getResources().getString(R.string.no_connect),Toast.LENGTH_LONG).show();
                 break;
             case Caller.NOT_LOADING_DATA:
-//                infoText.setText(getResources().getString(R.string.not_loading_data));
                 break;
             default:
                 Log.d(Caller.titleMessage[number], message);
@@ -200,7 +199,6 @@ public class OneUsersFragment extends Fragment implements MainView {
                 List<RealmModelRep> realmModelRepList = presenter.getRealmModelReps();
                 if(realmModelRepList != null && realmModelRepList.size() > 0){
                     reposText.setText(getReposInfo(realmModelRepList));
-//                    reposText.setVisibility(View.VISIBLE);
                 }
                 break;
             default:

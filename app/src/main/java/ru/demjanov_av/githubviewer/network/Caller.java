@@ -5,8 +5,6 @@ import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -243,7 +241,7 @@ public class Caller {
             if(call != null) {
                 call.enqueue(new Callback<RetrofitModel>() {
                     @Override
-                    public void onResponse(Call<RetrofitModel> call, Response<RetrofitModel> response) {
+                    public void onResponse(@Nullable Call<RetrofitModel> call, @Nullable Response<RetrofitModel> response) {
                         if(response.isSuccessful()){
                             if(response.body() != null){
                                 RetrofitModel rm = response.body();
@@ -341,11 +339,8 @@ public class Caller {
     /////////////////////////////////////////////////////
     // Method resetCaller
     ////////////////////////////////////////////////////
-    public void resetCaller(){
-//        if(this.retrofitModelList.size() > 0) {
-//            this.retrofitModelList.removeAll(this.retrofitModelList);
-//        }
-//        this.retrofitModelList = new ArrayList<RetrofitModel>();
+    private void resetCaller(){
+
         this.codeMessage = NOT_MESSAGE;
         this.message = null;
     }

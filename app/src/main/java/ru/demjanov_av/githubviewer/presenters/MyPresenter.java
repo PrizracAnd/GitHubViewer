@@ -19,19 +19,6 @@ import ru.demjanov_av.githubviewer.network.CallerInterface;
  */
 
 public abstract class MyPresenter implements CallerInterface, QueryUsersInterface {
-//    @Inject
-//    Realm realm;
-
-
-    /////////////////////////////////////////////////////
-    // Constructor
-    ////////////////////////////////////////////////////
-//    public MyPresenter(Context context){
-//        DaggerInjectorRealm.builder()
-//                .contextProvider(new ContextProvider(context))
-//                .build()
-//                .injectToPresenter(this);
-//    }
 
 
     /////////////////////////////////////////////////////

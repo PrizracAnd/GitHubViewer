@@ -151,7 +151,6 @@ public class QueryUsers {
                     RealmModelRep realmModelRep = new RealmModelRep();
                     realmModelRep.setRepId(item.getId());
                     realmModelRep.setNameRep(item.getName());
-//                    realmModelRep.setUserId(item.getUserId());
                     realmModelRep.setUserId(userID);
                     realm.insertOrUpdate(realmModelRep);
                     realm.commitTransaction();
@@ -191,29 +190,6 @@ public class QueryUsers {
                 .observeOn(AndroidSchedulers.mainThread());
 
         this.disposable = (Disposable) single.subscribeWith(createObserverSelectUser());
-//        this.disposable = (Disposable) single.subscribeWith(new DisposableSingleObserver<List<RealmModelUser>>() {
-//
-//
-//            @Override
-//            public void onSuccess(List<RealmModelUser> list) {
-//                modelUsersList = list;
-//                isTransact = false;
-//                isSuccess = true;
-//
-//                presenter.onCompleteQueryUsers(SELECT, list);
-//
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                modelUsersList = null;
-//                isTransact = false;
-//                isSuccess = false;
-//                Log.d(REALM_DB, e.getMessage());
-//
-//                presenter.onErrorQueryUsers(e.getMessage());
-//            }
-//        });
     }
 
 
@@ -236,29 +212,6 @@ public class QueryUsers {
                 .observeOn(AndroidSchedulers.mainThread());
 
         this.disposable = (Disposable) single.subscribeWith(createObserverSelectUser());
-//        this.disposable = (Disposable) single.subscribeWith(new DisposableSingleObserver<List<RealmModelUser>>() {
-//
-//
-//            @Override
-//            public void onSuccess(List<RealmModelUser> list) {
-//                modelUsersList = list;
-//                isTransact = false;
-//                isSuccess = true;
-//
-//                presenter.onCompleteQueryUsers(SELECT, list);
-//
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                modelUsersList = null;
-//                isTransact = false;
-//                isSuccess = false;
-//                Log.d(REALM_DB, e.getMessage());
-//
-//                presenter.onErrorQueryUsers(e.getMessage());
-//            }
-//        });
     }
     //-----End-------------------------------------------
 

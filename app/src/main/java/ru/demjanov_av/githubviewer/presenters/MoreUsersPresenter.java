@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -119,11 +118,7 @@ public class MoreUsersPresenter  extends MyPresenter {
         Caller caller = new Caller(this.context, this);
         this.isDownload = true;
 
-//        try {
-          caller.downloadUsers(previous_id);
-//        }catch (IOException e){
-//            onFail(false, Caller.ON_FAILURE, e.getMessage());
-//        }
+        caller.downloadUsers(previous_id);
     }
 
 
@@ -155,7 +150,7 @@ public class MoreUsersPresenter  extends MyPresenter {
     private Long strToLong(String str){
         Long res = -1L;
         try {
-            res = new Long(str);
+            res = Long.valueOf(str);
         }catch (NumberFormatException e){
             Log.d(MORE_USERS_PRESENTER, e.getMessage());
         }
@@ -169,30 +164,6 @@ public class MoreUsersPresenter  extends MyPresenter {
     ////////////////////////////////////////////////////
     @Nullable
     public String getUsers(){
-
-//        if (this.retrofitModelList.size() < 1){
-//            return null;
-//        }
-//
-//        StringBuilder sb = new StringBuilder();
-//        for(RetrofitModel item: this.retrofitModelList) {
-//            sb.append(RetrofitModel.LOGIN + ":\t");
-//            sb.append(item.getLogin());
-//            sb.append("\n");
-//            sb.append(RetrofitModel.ID +":\t");
-//            sb.append(item.getId());
-//            sb.append("\n");
-//            sb.append(RetrofitModel.AVATAR_URL +":\t");
-//            sb.append(item.getAvatarUrl());
-//            sb.append("\n");
-//            sb.append("---*****---");
-//            sb.append("\n");
-//            sb.append("\n");
-//        }
-//        return sb.toString();
-
-
-//        **********************************************************
 
         if(this.realmModelUsers == null){
             return null;
@@ -214,8 +185,6 @@ public class MoreUsersPresenter  extends MyPresenter {
             sb.append("\n");
         }
         return sb.toString();
-
-
     }
 
 
@@ -223,7 +192,6 @@ public class MoreUsersPresenter  extends MyPresenter {
     // Method getResults
     ////////////////////////////////////////////////////
     public RealmResults<RealmModelUser> getResults(){
-//        return this.realm.where(RealmModelUser.class).findAll();
         return this.realmResults;
     }
 

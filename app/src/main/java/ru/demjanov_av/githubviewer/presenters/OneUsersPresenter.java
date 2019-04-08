@@ -146,7 +146,7 @@ public class OneUsersPresenter extends MyPresenter {
                 caller.downloadUser(userName);
                 caller.downloadRepos(userName);
 
-//            this.isDownloadNeed = false;
+
             }
         }
     }
@@ -203,7 +203,6 @@ public class OneUsersPresenter extends MyPresenter {
                 this.realmModelUsers = realmModelUsers;
                 this.isSelectUser = false;
                 this.oneUsersFragment.setData(MainView.SET_USERS_DATA);
-//                onSelectedData();
                 onSelectDataComplete();
                 //---------------+++------------------------
                 if(isDownloadNeed) {
@@ -228,7 +227,6 @@ public class OneUsersPresenter extends MyPresenter {
                 this.realmModelReps = realmModelReps;
                 this.isSelectRepos = false;
                 this.oneUsersFragment.setData(MainView.SET_REPOS_DATA);
-//                onSelectedData();
                 onSelectDataComplete();
                 break;
             case QueryUsers.INSERT_OR_UPDATE:
@@ -245,18 +243,6 @@ public class OneUsersPresenter extends MyPresenter {
     }
 
     //-----End-------------------------------------------
-
-
-    /////////////////////////////////////////////////////
-    // Method onSelectedData
-    ////////////////////////////////////////////////////
-    private void onSelectedData() {
-        if(!this.isSelectUser && !this.isSelectRepos && this.isDownloadNeed){   //--Проверяем, получены ли все данные из БД и требуется ли их актуализация
-//            this.isDownloadNeed = false;                                        //--сбрасываем флаг требования автоактуализации, чтоб избежать возможного зацикливания
-            downloadData();                                                     //--запрашиваем данные из сети
-        }
-    }
-
 
 
     /////////////////////////////////////////////////////

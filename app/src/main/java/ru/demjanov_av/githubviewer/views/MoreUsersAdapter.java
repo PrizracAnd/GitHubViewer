@@ -139,15 +139,6 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
         return this.moreUsers.size() + 1;
     }
 
-//    public int getCurrentPosition(){
-////        return mvh.getSelectedPosition();
-//        return mvh.getAdapterPosition();
-//    }
-
-    //    private void supportClickItem(){
-//        this.moreUsersFragment.onCallUser(this.moreUsers.get(getCurrentPosition()).getId());
-//    }
-
 
     /////////////////////////////////////////////////////
     // Method  onChange
@@ -186,14 +177,6 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
 
         MyViewHolder(View itemView) {
             super(itemView);
-//            ButterKnife.bind(this, itemView);
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    supportClickItem();
-//                }
-//            });
-
         }
 
         void bind(int position, String text){
@@ -206,12 +189,6 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
         public int getSelectedPosition(){
             return this.getLayoutPosition();
         }
-
-
-//        @OnClick(R.id.more_users_item_text)
-//        public void onClickItem(View v){
-//            supportClickItem((int)v.getTag());
-//        }
 
     }
     //-----End of MyViewHolder class---------------------
