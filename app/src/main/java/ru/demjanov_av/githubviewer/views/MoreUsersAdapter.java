@@ -1,6 +1,7 @@
 package ru.demjanov_av.githubviewer.views;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.RealmResults;
 import ru.demjanov_av.githubviewer.R;
+import ru.demjanov_av.githubviewer.crypto.EncryptorGOST;
 import ru.demjanov_av.githubviewer.models.RealmModelUser;
 
 
@@ -30,6 +32,7 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
     private RealmResults<RealmModelUser> moreUsers;
     private MyViewHolder mvh;
     private MoreUsersFragment moreUsersFragment;
+    private EncryptorGOST encryptorGOST;
     //-----Class variables end---------------------------
 
 
@@ -51,11 +54,12 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
     /////////////////////////////////////////////////////
     // Constructor of MoreUsersAdapter
     ////////////////////////////////////////////////////
-    MoreUsersAdapter(RealmResults<RealmModelUser> moreUsers, MoreUsersFragment moreUsersFragment) {
+    MoreUsersAdapter(RealmResults<RealmModelUser> moreUsers, MoreUsersFragment moreUsersFragment, @Nullable EncryptorGOST encryptorGOST) {
         this.moreUsers = moreUsers;
         this.moreUsers.addChangeListener(this);
 
         this.moreUsersFragment = moreUsersFragment;
+        this.encryptorGOST = encryptorGOST;
     }
 
 
@@ -239,6 +243,17 @@ public class MoreUsersAdapter extends RecyclerView.Adapter<MoreUsersAdapter.MyVi
         @OnClick(R.id.more_users_item_text)
         public void onClickItem(View v){
             supportClickItem((int)v.getTag());
+        }
+
+        @Override
+        void bind(int position, String text){
+            String str = text;
+
+            if(encryptorGOST != null){
+                str = encryptorGOST.decrypt(text);
+            }
+
+            super.bind(position, str);
         }
     }
     //-----End of ItemViewHolder class-------------------

@@ -1,6 +1,7 @@
 package ru.demjanov_av.githubviewer.presenters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -12,12 +13,15 @@ import javax.inject.Inject;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
+import ru.demjanov_av.githubviewer.crypto.AES;
+import ru.demjanov_av.githubviewer.crypto.EncryptorGOST;
 import ru.demjanov_av.githubviewer.db.QueryUsers;
 import ru.demjanov_av.githubviewer.injector.ContextProvider;
 import ru.demjanov_av.githubviewer.injector.db.DaggerInjectorRealm;
 import ru.demjanov_av.githubviewer.models.RealmModelUser;
 import ru.demjanov_av.githubviewer.models.RetrofitModel;
 import ru.demjanov_av.githubviewer.network.Caller;
+import ru.demjanov_av.githubviewer.save_load.Preferencer;
 import ru.demjanov_av.githubviewer.views.MoreUsersFragment;
 
 /**
@@ -43,6 +47,7 @@ public class MoreUsersPresenter  extends MyPresenter {
     private RealmResults<RealmModelUser> realmResults;
     private String previous_id = "0";
     private QueryUsers queryUsers;
+    private EncryptorGOST encryptorGOST;
     //-----Other variables end---------------------------
 
 
@@ -58,15 +63,25 @@ public class MoreUsersPresenter  extends MyPresenter {
     /////////////////////////////////////////////////////
     // Constructor
     ////////////////////////////////////////////////////
-    public MoreUsersPresenter(MoreUsersFragment moreUsersFragment, Context context) {
+    public MoreUsersPresenter(MoreUsersFragment moreUsersFragment, Context context, @NonNull byte[] secretKeysBytes) {
         this.moreUsersFragment = moreUsersFragment;
         this.context = context;
+
 
         DaggerInjectorRealm.builder()
                 .contextProvider(new ContextProvider(context))
                 .build()
                 .injectToMoreUsersPresenter(this);
+
+
+
         this.queryUsers = new QueryUsers(this.realmConfiguration, this);
+
+
+        if(createEGOST(context, secretKeysBytes)){
+            this.queryUsers.deleteAllUsers();
+        }
+
 
         this.realmResults = this.realm.where(RealmModelUser.class).findAll();
 
@@ -78,6 +93,17 @@ public class MoreUsersPresenter  extends MyPresenter {
         }
     }
 
+
+    /////////////////////////////////////////////////////
+    // Method createEGOST
+    ////////////////////////////////////////////////////
+    private boolean createEGOST(Context context, byte[] secretKeysBytes){
+        Preferencer preferencer = new Preferencer(context);
+        preferencer.setAes(new AES(secretKeysBytes));
+        this.encryptorGOST = new EncryptorGOST(preferencer);
+
+        return this.encryptorGOST.isGeneratedKey();
+    }
 
     /////////////////////////////////////////////////////
     // Methods for Callers callings
@@ -98,7 +124,7 @@ public class MoreUsersPresenter  extends MyPresenter {
 
         this.moreUsersFragment.endLoad();
 
-        updateLoadedUsers(this.realmResults.get(this.realmResults.size() - 1).getId());
+//        updateLoadedUsers(this.realmResults.get(this.realmResults.size() - 1).getId());
     }
 
 
@@ -155,7 +181,7 @@ public class MoreUsersPresenter  extends MyPresenter {
     private Long strToLong(String str){
         Long res = -1L;
         try {
-            res = new Long(str);
+            res = Long.valueOf(str);
         }catch (NumberFormatException e){
             Log.d(MORE_USERS_PRESENTER, e.getMessage());
         }
@@ -223,8 +249,15 @@ public class MoreUsersPresenter  extends MyPresenter {
     // Method getResults
     ////////////////////////////////////////////////////
     public RealmResults<RealmModelUser> getResults(){
-//        return this.realm.where(RealmModelUser.class).findAll();
         return this.realmResults;
+    }
+
+
+    /////////////////////////////////////////////////////
+    // Method getEncryptorGOST
+    ////////////////////////////////////////////////////
+    public EncryptorGOST getEncryptorGOST() {
+        return encryptorGOST;
     }
 
 

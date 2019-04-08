@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity implements PswFragment.Enter
 
     //-----Class variables begin--------------------------
     private FragmentManager fm;
-    private byte[] keySpecBytes;
+    private byte[] keySpecBytes = new byte[0];
     //-----Class variables end----------------------------
 
 
@@ -50,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements PswFragment.Enter
                 .commit();
     }
 
+
+    public byte[] getKeySpecBytes() {
+        return keySpecBytes;
+    }
 
     /////////////////////////////////////////////////////
     // Method onDestroy

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.demjanov_av.githubviewer.MainActivity;
 import ru.demjanov_av.githubviewer.R;
 import ru.demjanov_av.githubviewer.presenters.MainView;
 import ru.demjanov_av.githubviewer.presenters.MoreUsersPresenter;
@@ -87,9 +88,8 @@ public class MoreUsersFragment extends Fragment implements MoreUsersAdapter.More
     private void initializeElements(View view) {
         ButterKnife.bind(this, view);
 
-
         //---Presenter_begin---
-        this.presenter = new MoreUsersPresenter(this, view.getContext());
+        this.presenter = new MoreUsersPresenter(this, view.getContext(), ((MainActivity)getActivity()).getKeySpecBytes());
         //---Presenter_end---
 
 
@@ -108,7 +108,7 @@ public class MoreUsersFragment extends Fragment implements MoreUsersAdapter.More
     private void initializeRecycler(View view){
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         //передаем в адаптер RealmResults для автообновления и наш MoreUsersFragment для обратной связи
-        MoreUsersAdapter myAdapter = new MoreUsersAdapter(this.presenter.getResults(), this);
+        MoreUsersAdapter myAdapter = new MoreUsersAdapter(this.presenter.getResults(), this, this.presenter.getEncryptorGOST());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(myAdapter);
 
