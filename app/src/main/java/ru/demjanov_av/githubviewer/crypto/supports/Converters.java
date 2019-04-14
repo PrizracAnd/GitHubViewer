@@ -237,11 +237,11 @@ public class Converters {
 
 
     /////////////////////////////////////////////////////
-    // Supports Methods
+    // Method trimLeftByteArray
     ////////////////////////////////////////////////////
     //-----Begin-----------------------------------------
     @NonNull
-    private static byte[] trimLeftByteArray(byte[] bytes){
+    public static byte[] trimLeftByteArray(byte[] bytes){
         int i = bytes.length;
 
         for (int j = i - 1; j >= 0; j--){

@@ -164,7 +164,7 @@ public class Preferencer {
         }
 
         if(longList.size() > 0) {
-            return Converters.listLongToByteArray(longList);
+            return Converters.trimLeftByteArray(Converters.listLongToByteArray(longList));
         }else {
             return null;
         }

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 import ru.demjanov_av.githubviewer.crypto.Hasher;
 import ru.demjanov_av.githubviewer.crypto.supports.Converters;
@@ -43,8 +44,8 @@ public class PswPresenter {
     private int[] inputNumbers;
     private PswFragment pswFragment;
     private Preferencer preferencer;
-    private String loadedHash = null;
-    private String hash = null;
+    private byte[] loadedHash = null;
+    private byte[] hash = null;
     private byte[] secretKeysBytes = new byte[0];
     //-----Class variables end----------------------------
 
@@ -176,11 +177,13 @@ public class PswPresenter {
     ////////////////////////////////////////////////////
     //-----Begin----------------------------------------
     private void loadHash(){
-        this.loadedHash = this.preferencer.loadString(Preferencer.CRYPTO_PREFERENCES, Preferencer.KEY_HASH);
+//        this.loadedHash = this.preferencer.loadString(Preferencer.CRYPTO_PREFERENCES, Preferencer.KEY_HASH);
+        this.loadedHash = this.preferencer.loadBytes(Preferencer.CRYPTO_PREFERENCES, Preferencer.KEY_HASH);
     }
 
     private void saveHash(){
-        this.preferencer.saveString(Preferencer.CRYPTO_PREFERENCES, Preferencer.KEY_HASH, this.hash);
+       // this.preferencer.saveString(Preferencer.CRYPTO_PREFERENCES, Preferencer.KEY_HASH, this.hash);
+        this.preferencer.saveBytes(Preferencer.CRYPTO_PREFERENCES, Preferencer.KEY_HASH, this.hash);
     }
     //-----End------------------------------------------
 
@@ -192,7 +195,7 @@ public class PswPresenter {
 
         genHash(a);
 
-        return this.loadedHash.equals(this.hash);
+        return Arrays.equals(this.loadedHash, this.hash);
     }
 
     /////////////////////////////////////////////////////
@@ -201,8 +204,8 @@ public class PswPresenter {
     private void genHash(int[] a){
         try {
             this.secretKeysBytes = (new SequenceGenerator()).generate(a);
-            this.hash = new String((new Hasher()).getHash(this.secretKeysBytes), Converters.SYMBOL_CODE_NAME);
-        } catch (SequenceGenerator.SequenceGeneratorException | UnsupportedEncodingException e) {
+            this.hash = (new Hasher()).getHash(this.secretKeysBytes);
+        } catch (SequenceGenerator.SequenceGeneratorException e) {
             Log.d(THIS_NAME, ": " + e.getMessage());
         }
     }
