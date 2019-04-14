@@ -4,7 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ru.demjanov_av.githubviewer.crypto.AES;
+import ru.demjanov_av.githubviewer.crypto.supports.Converters;
 
 
 /**
@@ -116,7 +120,7 @@ public class Preferencer {
 
 
     /////////////////////////////////////////////////////
-    // Method saveString
+    // Method removeString
     ////////////////////////////////////////////////////
     public void removeString(String prefFileName, String saveKey){
         SharedPreferences sp = this.context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
@@ -125,4 +129,94 @@ public class Preferencer {
         editor.apply();
     }
 
+
+    /////////////////////////////////////////////////////
+    // Method saveBytes
+    ////////////////////////////////////////////////////
+    public void saveBytes(String prefFileName, String saveKey, byte[] bytes){
+        SharedPreferences sp = this.context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
+        int i = 0;
+        for(long item: Converters.byteArrayToListLong(bytes)){
+            editor.putLong(saveKey + i, item);
+            i++;
+        }
+        editor.apply();
+    }
+
+
+    /////////////////////////////////////////////////////
+    // Method loadBytes
+    ////////////////////////////////////////////////////
+    @Nullable
+    public byte[] loadBytes(String prefFileName, String loadKey){
+        SharedPreferences sp = this.context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
+
+        List<Long> longList = new ArrayList<Long>();
+        int i = 0;
+        String innerLoadKey = loadKey + i;
+
+        while (sp.contains(innerLoadKey)){
+            longList.add(sp.getLong(innerLoadKey, 0L));
+            i++;
+            innerLoadKey = loadKey + i;
+        }
+
+        if(longList.size() > 0) {
+            return Converters.listLongToByteArray(longList);
+        }else {
+            return null;
+        }
+    }
+
+
+    /////////////////////////////////////////////////////
+    // Method removeBytes
+    ////////////////////////////////////////////////////
+    public void removeBytes(String prefFileName, String saveKey){
+        SharedPreferences sp = this.context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
+        int i = 0;
+        String innerSaveKey = saveKey + i;
+
+        while (sp.contains(innerSaveKey)){
+            editor.remove(innerSaveKey);
+            i++;
+            innerSaveKey = saveKey + i;
+        }
+        editor.apply();
+    }
+
+
+    /////////////////////////////////////////////////////
+    // Method saveBytesWithEncrypt
+    ////////////////////////////////////////////////////
+    public void saveBytesWithEncrypt(String prefFileName, String saveKey, byte[] bytes){
+        byte[] encryptBytes = null;
+
+        if(this.aes != null) {
+            encryptBytes = aes.encrypt(bytes);
+        }
+
+        if(encryptBytes != null){
+            saveBytes(prefFileName, saveKey, encryptBytes);
+        }
+    }
+
+
+    /////////////////////////////////////////////////////
+    // Method loadBytesWithDecrypt
+    ////////////////////////////////////////////////////
+    @Nullable
+    public byte[] loadBytesWithDecrypt(String prefFileName, String loadKey){
+        byte[] bytes = loadBytes(prefFileName, loadKey);
+
+        if(this.aes == null || bytes == null){
+            return null;
+        }else {
+            return aes.decrypt(bytes);
+        }
+    }
 }

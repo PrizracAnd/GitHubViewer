@@ -66,12 +66,14 @@ public class AES {
     public void setSecretKeySpec(byte[] bytes){
         this.secretKeySpec = new SecretKeySpec(bytes, NAME_OF_AES);
     }
-    //-----End-------------------------------------------------
+    //-----End------------------------------------------------
 
 
     //////////////////////////////////////////////////////////
-    ///  Method encrypt
+    ///  Methods encrypt
     /////////////////////////////////////////////////////////
+    //-----Begin----------------------------------------------
+    @Deprecated
     @Nullable
     public String encrypt (String openText){
         if(this.secretKeySpec == null){
@@ -89,10 +91,30 @@ public class AES {
         }
     }
 
+    @Nullable
+    public byte[] encrypt (byte[] openText){
+        if(this.secretKeySpec == null || openText == null){
+            return null;
+        }
+
+        try {
+
+            this.cipher.init(Cipher.ENCRYPT_MODE, this.secretKeySpec, this.random);
+            return this.cipher.doFinal(openText);
+
+        } catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
+            Log.d(NAME_OF_AES, ": " + e.getMessage());
+            return null;
+        }
+    }
+    //-----End------------------------------------------------
+
 
     //////////////////////////////////////////////////////////
-    ///  Method decrypt
+    ///  Methods decrypt
     /////////////////////////////////////////////////////////
+    //-----Begin----------------------------------------------
+    @Deprecated
     @Nullable
     public String decrypt (String encryptText){
         if(this.secretKeySpec == null){
@@ -109,4 +131,21 @@ public class AES {
             return null;
         }
     }
+
+    @Nullable
+    public byte[] decrypt (byte[] encryptText){
+        if(this.secretKeySpec == null || encryptText == null){
+            return null;
+        }
+
+        try {
+            this.cipher.init(Cipher.DECRYPT_MODE, this.secretKeySpec, this.random);
+            return this.cipher.doFinal(encryptText);
+
+        } catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
+            Log.d(NAME_OF_AES, ": " + e.getMessage());
+            return null;
+        }
+    }
+    //-----End------------------------------------------------
 }
